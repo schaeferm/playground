@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<feature
+      id="test.feature"
+      label="Android Unlock Pattern Deployment Feature"
+      version="1.0.0.qualifier">
+
+   <description url="http://www.example.com/description">
+      The only purpose of this feature is to ship the Android Unlock
+Pattern Plugin.
+
+It is ment for demonstration only.
+   </description>
+
+   <copyright url="http://www.example.com/copyright">
+      For demonstration only! Don&apos;t use it in other ways.
+   </copyright>
+
+   <license url="http://www.example.com/license">
+      For demonstration only! Don&apos;t use it in other ways.
+   </license>
+
+   <plugin
+         id="org.jcryptool.visual.androidUnlockPattern"
+         download-size="0"
+         install-size="0"
+         version="0.0.0"
+         unpack="false"/>
+
+</feature>

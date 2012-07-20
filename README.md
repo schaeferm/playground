@@ -1,4 +1,4 @@
 playground
 ==========
 
-test repository
+This repository is just for test purposes.
