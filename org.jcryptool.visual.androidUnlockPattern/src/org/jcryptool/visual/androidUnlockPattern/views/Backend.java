@@ -106,113 +106,16 @@ public class Backend {
 	public void btnMainClick(int btnNummer) {
 		add(btnNummer);
 		visual.getBtnCancel().setEnabled(true);
-		// if (modus == 1) {
-		// // if (first) {
-		// // if (!isValid()) {
-		// // setColor(ROT);
-		// // } else if (!isGreatEnough()) {
-		// // setColor(GELB);
-		// // visual.setText(Messages.Backend_TEXT_TO_SHORT);
-		// // } else {
-		// // setColor(GRUEN);
-		// // visual.getBtnSave().setEnabled(true);
-		// // visual.setText(Messages.Backend_TEXT_VALID);
-		// // }
-		// // if (length > 1) {
-		// // for (int[] line : lines) {
-		// // if (line[0] == 0 && line[1] == 0) {
-		// // line[0] = order[length - 2];
-		// // line[1] = order[length - 1];
-		// // visual.getCenterbox().redraw();
-		// // break; // TODO rethink... is this smart?
-		// // }
-		// // }
-		// // }
-		// // }
-		// if (!isValid()) {
-		// setColor(ROT);
-		// } else if (!isGreatEnough()) {
-		// setColor(GELB);
-		// visual.setText(Messages.Backend_TEXT_TO_SHORT);
-		// } else {
-		// setColor(GRUEN);
-		// visual.getBtnSave().setEnabled(true);
-		// visual.setText(Messages.Backend_TEXT_VALID);
-		// }
-		// if (length > 1) {
-		// for (int[] line : lines) {
-		// if (line[0] == 0 && line[1] == 0) {
-		// line[0] = order[length - 2];
-		// line[1] = order[length - 1];
-		// visual.getCenterbox().redraw();
-		// break; // TODO rethink... is this smart?
-		// }
-		// }
-		// }
-		// // } else if (modus == 2) {
-		// // if (!isValid()) {
-		// // if (isChangable && first) {
-		// // setColor(ROT);
-		// // }
-		// // } else if (!isGreatEnough()) {
-		// // if (isChangable && first) {
-		// // setColor(GELB);
-		// // }
-		// // } else {
-		// // visual.getBtnSave().setEnabled(true);
-		// // if (isChangable && first) {
-		// // setColor(GRUEN);
-		// // }
-		// // }
-		// // if (isChangable && first) {
-		// // if (length > 1) {
-		// // for (int[] line : lines) {
-		// // if (line[0] == 0 && line[1] == 0) {
-		// // line[0] = order[length - 2];
-		// // line[1] = order[length - 1];
-		// // visual.getCenterbox().redraw();
-		// // break; // TODO rethink... is this smart?
-		// // }
-		// // }
-		// // }
-		// //
-		// // }
-		// } else if (modus == 2) {
-		// if (!isValid()) {
-		// setColor(ROT);
-		// } else if (!isGreatEnough()) {
-		// setColor(GELB);
-		// } else {
-		// visual.getBtnSave().setEnabled(true);
-		// setColor(GRUEN);
-		// }
-		// if (length > 1) {
-		// for (int[] line : lines) {
-		// if (line[0] == 0 && line[1] == 0) {
-		// line[0] = order[length - 2];
-		// line[1] = order[length - 1];
-		// visual.getCenterbox().redraw();
-		// break; // TODO rethink... is this smart?
-		// }
-		// }
-		// }
-		// } else if (modus == 3) {
-		// visual.getBtnSave().setEnabled(true);
-		// }
-
 		if (!isValid()) {
 			setColor(ROT);
 			visual.getBtnSave().setEnabled(false);
-//			visual.setText(Messages.Backend_InfoTextInvalid);
 			visual.getStatusText().setText(Messages.Backend_InfoTextInvalid);
 		} else if (!isGreatEnough()) {
 			setColor(GELB);
-//			visual.setText(Messages.Backend_TEXT_TO_SHORT);
 			visual.getStatusText().setText(Messages.Backend_TEXT_TO_SHORT);
 		} else {
 			setColor(GRUEN);
 			visual.getBtnSave().setEnabled(true);
-//			visual.setText(Messages.Backend_TEXT_VALID);
 			visual.getStatusText().setText(Messages.Backend_TEXT_VALID);
 		}
 		if (length > 1) {
@@ -246,9 +149,7 @@ public class Backend {
 			resetOrder();
 			save();
 			setModus(1);
-
 		} else {
-
 			// nichts oder cancel? -> nichts
 		}
 
@@ -294,12 +195,6 @@ public class Backend {
 				resetOrder();
 			} else if (Arrays.equals(ordertmp, order)) {
 				saveOrder();
-
-				//no error popup -> do not display
-//				visual.MsgBox(Messages.Backend_PopupSavedHeading,
-//						Messages.Backend_PopupSavedMessage,
-//						SWT.ICON_INFORMATION | SWT.OK);
-				//TODO Nutzer mittels im Beschreibungsbereich darüber informieren
 				visual.getStatusText().setText(Messages.Backend_PopupSavedMessage);
 				resetBtn();
 				resetOrder();
@@ -307,20 +202,9 @@ public class Backend {
 			} else {
 				// MsgBox unequal pattern or Error
 				btnCancelClick();
-//				visual.MsgBox(Messages.Backend_PopupNotSavedHeading,
-//						Messages.Backend_PopupNotSavedMessage,
-//						SWT.ICON_ERROR | SWT.OK);
 				visual.getStatusText().setText(Messages.Backend_PopupNotSavedMessage);
 			}
 		} else {
-//			first = true;
-//			isChangable = false;
-//			resetBtn();
-//			resetOrder();
-//			visual.MsgBox(Messages.Backend_PopupInvalidHeading,
-//					Messages.Backend_PopupInvalidMessage, SWT.ICON_INFORMATION
-//							| SWT.OK);
-//			modusChanged();
 			btnCancelClick();
 			visual.MsgBox(Messages.Backend_PopupInvalidHeading,
 					Messages.Backend_PopupInvalidMessage, SWT.ICON_ERROR
@@ -333,11 +217,6 @@ public class Backend {
 	 */
 	private boolean checkPattern() {
 		if (Arrays.equals(order, ordersaved)) {
-			//no error popup -> do not display
-//			visual.MsgBox(Messages.Backend_PopupValidHeading,
-//					Messages.Backend_PopupValidMessage, SWT.ICON_INFORMATION
-//							| SWT.OK);
-			//TODO inform user
 			visual.getStatusText().setText(Messages.Backend_PopupValidMessage);
 			resetBtn();
 			resetOrder();
@@ -345,10 +224,6 @@ public class Backend {
 			return true;
 		} else {
 			tryCount++;
-//			visual.MsgBox(
-//					Messages.Backend_PopupWrongHeading,
-//					String.format(Messages.Backend_PopupWrongMessage, tryCount),
-//					SWT.ICON_ERROR | SWT.OK);
 			visual.getStatusText().setText(String.format(Messages.Backend_PopupWrongMessage, tryCount));
 			resetBtn();
 			resetOrder();
@@ -396,20 +271,7 @@ public class Backend {
 		//reset text only when order comes from user
 //		if(!silent) visual.getStatusLabel().setText("");
 		visual.getStatusText().setText("");
-
-//		if (!cancelShowed && !silent) {
-//			cancelShowed = true;
-//			visual.MsgBox(Messages.Backend_PopupCancelHeading,
-//					Messages.Backend_PopupCancelMessage, SWT.ICON_INFORMATION
-//							| SWT.OK);
-//		}
 	}
-
-	/*
-	 * public void btnCheckClick() { if (modus == 1) { //PopUp? } else if (modus
-	 * == 2) { // btn save aktivieren } else if (modus == 3) { // hier soll
-	 * nicht passieren } }
-	 */
 
 	/**
 	 * Checks if a pattern can be load from a savefile and sets the applicable
@@ -568,7 +430,7 @@ public class Backend {
 			visual.getBtnSave().setText(Messages.Backend_ButtonCheckText);
 			visual.getBtnSave().setEnabled(false);
 		} else {
-			// FEhler
+			// Fehler
 		}
 		isChangable = false;
 		first = true;
@@ -735,11 +597,6 @@ public class Backend {
 		this.modus = modus;
 		modusChanged();
 	}
-
-//	public void centerResize() {
-//		visual.centerResize();
-//
-//	}
 
 	public void recalculateLines() {
 		for (int i = 0; i < points.length; i++) {
