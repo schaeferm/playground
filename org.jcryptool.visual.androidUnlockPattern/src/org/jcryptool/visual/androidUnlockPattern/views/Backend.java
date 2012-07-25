@@ -106,114 +106,17 @@ public class Backend {
 	public void btnMainClick(int btnNummer) {
 		add(btnNummer);
 		visual.getBtnCancel().setEnabled(true);
-		// if (modus == 1) {
-		// // if (first) {
-		// // if (!isValid()) {
-		// // setColor(ROT);
-		// // } else if (!isGreatEnough()) {
-		// // setColor(GELB);
-		// // visual.setText(Messages.Backend_TEXT_TO_SHORT);
-		// // } else {
-		// // setColor(GRUEN);
-		// // visual.getBtnSave().setEnabled(true);
-		// // visual.setText(Messages.Backend_TEXT_VALID);
-		// // }
-		// // if (length > 1) {
-		// // for (int[] line : lines) {
-		// // if (line[0] == 0 && line[1] == 0) {
-		// // line[0] = order[length - 2];
-		// // line[1] = order[length - 1];
-		// // visual.getCenterbox().redraw();
-		// // break; // TODO rethink... is this smart?
-		// // }
-		// // }
-		// // }
-		// // }
-		// if (!isValid()) {
-		// setColor(ROT);
-		// } else if (!isGreatEnough()) {
-		// setColor(GELB);
-		// visual.setText(Messages.Backend_TEXT_TO_SHORT);
-		// } else {
-		// setColor(GRUEN);
-		// visual.getBtnSave().setEnabled(true);
-		// visual.setText(Messages.Backend_TEXT_VALID);
-		// }
-		// if (length > 1) {
-		// for (int[] line : lines) {
-		// if (line[0] == 0 && line[1] == 0) {
-		// line[0] = order[length - 2];
-		// line[1] = order[length - 1];
-		// visual.getCenterbox().redraw();
-		// break; // TODO rethink... is this smart?
-		// }
-		// }
-		// }
-		// // } else if (modus == 2) {
-		// // if (!isValid()) {
-		// // if (isChangable && first) {
-		// // setColor(ROT);
-		// // }
-		// // } else if (!isGreatEnough()) {
-		// // if (isChangable && first) {
-		// // setColor(GELB);
-		// // }
-		// // } else {
-		// // visual.getBtnSave().setEnabled(true);
-		// // if (isChangable && first) {
-		// // setColor(GRUEN);
-		// // }
-		// // }
-		// // if (isChangable && first) {
-		// // if (length > 1) {
-		// // for (int[] line : lines) {
-		// // if (line[0] == 0 && line[1] == 0) {
-		// // line[0] = order[length - 2];
-		// // line[1] = order[length - 1];
-		// // visual.getCenterbox().redraw();
-		// // break; // TODO rethink... is this smart?
-		// // }
-		// // }
-		// // }
-		// //
-		// // }
-		// } else if (modus == 2) {
-		// if (!isValid()) {
-		// setColor(ROT);
-		// } else if (!isGreatEnough()) {
-		// setColor(GELB);
-		// } else {
-		// visual.getBtnSave().setEnabled(true);
-		// setColor(GRUEN);
-		// }
-		// if (length > 1) {
-		// for (int[] line : lines) {
-		// if (line[0] == 0 && line[1] == 0) {
-		// line[0] = order[length - 2];
-		// line[1] = order[length - 1];
-		// visual.getCenterbox().redraw();
-		// break; // TODO rethink... is this smart?
-		// }
-		// }
-		// }
-		// } else if (modus == 3) {
-		// visual.getBtnSave().setEnabled(true);
-		// }
-
 		if (!isValid()) {
 			setColor(ROT);
 			visual.getBtnSave().setEnabled(false);
-//			visual.setText(Messages.Backend_InfoTextInvalid);
-			visual.getStatusText().setText(Messages.Backend_InfoTextInvalid);
+			visual.setStatusText(Messages.Backend_InfoTextInvalid);
 		} else if (!isGreatEnough()) {
 			setColor(GELB);
-//			visual.setText(Messages.Backend_TEXT_TO_SHORT);
-			visual.getStatusText().setText(Messages.Backend_TEXT_TO_SHORT);
+			visual.setStatusText(Messages.Backend_TEXT_TO_SHORT);
 		} else {
 			setColor(GRUEN);
 			visual.getBtnSave().setEnabled(true);
-//			visual.setText(Messages.Backend_TEXT_VALID);
-			visual.getStatusText().setText(Messages.Backend_TEXT_VALID);
+			visual.setStatusText(Messages.Backend_TEXT_VALID);
 		}
 		if (length > 1) {
 			for (int[] line : lines) {
@@ -241,14 +144,12 @@ public class Backend {
 			for (int i = 0; i < ordersaved.length; i++) {
 				ordersaved[i] = 0;
 			}
-			visual.getStatusText().setText("");
+			visual.setStatusText("");
 			resetBtn();
 			resetOrder();
 			save();
 			setModus(1);
-
 		} else {
-
 			// nichts oder cancel? -> nichts
 		}
 
@@ -289,38 +190,21 @@ public class Backend {
 				visual.getBtnSave().setText(
 						Messages.AndroidUnlockPattern_ButtonSaveText);
 				visual.getTextFeld().setText(Messages.Backend_TEXT_SET_SECOND);
-				visual.getStatusText().setText("");
+				visual.setStatusText("");
 				resetBtn();
 				resetOrder();
 			} else if (Arrays.equals(ordertmp, order)) {
 				saveOrder();
-
-				//no error popup -> do not display
-//				visual.MsgBox(Messages.Backend_PopupSavedHeading,
-//						Messages.Backend_PopupSavedMessage,
-//						SWT.ICON_INFORMATION | SWT.OK);
-				//TODO Nutzer mittels im Beschreibungsbereich darüber informieren
-				visual.getStatusText().setText(Messages.Backend_PopupSavedMessage);
+				visual.setStatusText(Messages.Backend_PopupSavedMessage);
 				resetBtn();
 				resetOrder();
 				setModus(3);
 			} else {
 				// MsgBox unequal pattern or Error
 				btnCancelClick();
-//				visual.MsgBox(Messages.Backend_PopupNotSavedHeading,
-//						Messages.Backend_PopupNotSavedMessage,
-//						SWT.ICON_ERROR | SWT.OK);
-				visual.getStatusText().setText(Messages.Backend_PopupNotSavedMessage);
+				visual.setStatusText(Messages.Backend_PopupNotSavedMessage);
 			}
 		} else {
-//			first = true;
-//			isChangable = false;
-//			resetBtn();
-//			resetOrder();
-//			visual.MsgBox(Messages.Backend_PopupInvalidHeading,
-//					Messages.Backend_PopupInvalidMessage, SWT.ICON_INFORMATION
-//							| SWT.OK);
-//			modusChanged();
 			btnCancelClick();
 			visual.MsgBox(Messages.Backend_PopupInvalidHeading,
 					Messages.Backend_PopupInvalidMessage, SWT.ICON_ERROR
@@ -333,23 +217,14 @@ public class Backend {
 	 */
 	private boolean checkPattern() {
 		if (Arrays.equals(order, ordersaved)) {
-			//no error popup -> do not display
-//			visual.MsgBox(Messages.Backend_PopupValidHeading,
-//					Messages.Backend_PopupValidMessage, SWT.ICON_INFORMATION
-//							| SWT.OK);
-			//TODO inform user
-			visual.getStatusText().setText(Messages.Backend_PopupValidMessage);
+			visual.setStatusText(Messages.Backend_PopupValidMessage);
 			resetBtn();
 			resetOrder();
 			tryCount = 0;
 			return true;
 		} else {
 			tryCount++;
-//			visual.MsgBox(
-//					Messages.Backend_PopupWrongHeading,
-//					String.format(Messages.Backend_PopupWrongMessage, tryCount),
-//					SWT.ICON_ERROR | SWT.OK);
-			visual.getStatusText().setText(String.format(Messages.Backend_PopupWrongMessage, tryCount));
+			visual.setStatusText(String.format(Messages.Backend_PopupWrongMessage, tryCount));
 			resetBtn();
 			resetOrder();
 			
@@ -395,21 +270,8 @@ public class Backend {
 		
 		//reset text only when order comes from user
 //		if(!silent) visual.getStatusLabel().setText("");
-		visual.getStatusText().setText("");
-
-//		if (!cancelShowed && !silent) {
-//			cancelShowed = true;
-//			visual.MsgBox(Messages.Backend_PopupCancelHeading,
-//					Messages.Backend_PopupCancelMessage, SWT.ICON_INFORMATION
-//							| SWT.OK);
-//		}
+		visual.setStatusText("");
 	}
-
-	/*
-	 * public void btnCheckClick() { if (modus == 1) { //PopUp? } else if (modus
-	 * == 2) { // btn save aktivieren } else if (modus == 3) { // hier soll
-	 * nicht passieren } }
-	 */
 
 	/**
 	 * Checks if a pattern can be load from a savefile and sets the applicable
@@ -568,7 +430,7 @@ public class Backend {
 			visual.getBtnSave().setText(Messages.Backend_ButtonCheckText);
 			visual.getBtnSave().setEnabled(false);
 		} else {
-			// FEhler
+			// Fehler
 		}
 		isChangable = false;
 		first = true;
@@ -736,11 +598,6 @@ public class Backend {
 		modusChanged();
 	}
 
-//	public void centerResize() {
-//		visual.centerResize();
-//
-//	}
-
 	public void recalculateLines() {
 		for (int i = 0; i < points.length; i++) {
 			for (int j = 0; j < points[i].length; j++) {
@@ -759,23 +616,27 @@ public class Backend {
 
 	private int[] getCoordinates(int btn) {
 		int xy[] = new int[2];
-		if (btn % 3 == 1) {
-			xy[0] = visual.getCntrBtn()[0].getSize().x / 2;
-		} else if (btn % 3 == 2) {
-			xy[0] = visual.getCenterbox().getSize().x / 2;
-		} else if (btn % 3 == 0) {
-			xy[0] = visual.getCenterbox().getSize().x
-					- visual.getCntrBtn()[0].getSize().x / 2;
-		}
-
-		if (btn < 4 && btn > 0) {
-			xy[1] = visual.getCntrBtn()[0].getSize().y / 2;
-		} else if (btn < 7 && btn > 3) {
-			xy[1] = visual.getCenterbox().getSize().y / 2;
-		} else if (btn < 10 && btn > 6) {
-			xy[1] = visual.getCenterbox().getSize().y
-					- visual.getCntrBtn()[0].getSize().y / 2;
-		}
+		
+//		if (btn % 3 == 1) {
+//			xy[0] = visual.getCntrBtn()[0].getSize().x / 2;
+//		} else if (btn % 3 == 2) {
+//			xy[0] = visual.getCenterbox().getSize().x / 2;
+//		} else if (btn % 3 == 0) {
+//			xy[0] = visual.getCenterbox().getSize().x
+//					- visual.getCntrBtn()[0].getSize().x / 2;
+//		}
+//
+//		if (btn < 4 && btn > 0) {
+//			xy[1] = visual.getCntrBtn()[0].getSize().y / 2;
+//		} else if (btn < 7 && btn > 3) {
+//			xy[1] = visual.getCenterbox().getSize().y / 2;
+//		} else if (btn < 10 && btn > 6) {
+//			xy[1] = visual.getCenterbox().getSize().y
+//					- visual.getCntrBtn()[0].getSize().y / 2;
+//		}
+		
+		xy[0] = visual.getCntrBtn()[btn-1].getLocation().x + visual.getCntrBtn()[btn-1].getSize().x / 2;
+		xy[1] = visual.getCntrBtn()[btn-1].getLocation().y + visual.getCntrBtn()[btn-1].getSize().y / 2;
 
 		return xy;
 	}

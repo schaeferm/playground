@@ -128,12 +128,12 @@ public class AndroidUnlockPattern extends ViewPart {
         statusText.setBackground(SWTResourceManager.getColor(240, 240, 240));
         statusText.setEditable(false);
         statusText.setDoubleClickEnabled(false);
-        statusText.setAlignment(SWT.CENTER);
         statusText.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, false, 3, 1));
         
         for (int i = 0; i < cntrBtn.length; i++) {
             cntrBtn[i] = new Button(centerbox, SWT.NONE);
             cntrBtn[i].setData("nummer", i); //$NON-NLS-1$
+            cntrBtn[i].setSize(40, 40);	//set initial size; will be updated during initiation
 
         }
         setPattern.setText(Messages.AndroidUnlockPattern_ModeSetText);
@@ -147,6 +147,7 @@ public class AndroidUnlockPattern extends ViewPart {
         centerResize();
 
         logic.init();
+        child.pack();
     }
 
     /**
@@ -204,7 +205,9 @@ public class AndroidUnlockPattern extends ViewPart {
         btnCancel.setText(Messages.AndroidUnlockPattern_ButtonCancelText);
 
         // center
-        final GridLayout clayout = new GridLayout(3, true);
+        final GridLayout clayout = new GridLayout(3, false);
+        clayout.horizontalSpacing = 15;
+        clayout.verticalSpacing = 15;
         centerbox.setLayout(clayout);
         final FormData fdCb = new FormData(0, 0);
         fdCb.top = new FormAttachment(headingBox, 6);
@@ -277,7 +280,8 @@ public class AndroidUnlockPattern extends ViewPart {
 
             @Override
             public void handleEvent(Event event) {
-                centerResize();
+            	centerResize();
+                centerbox.redraw();
             }
         });
 
@@ -288,8 +292,8 @@ public class AndroidUnlockPattern extends ViewPart {
                 public void widgetSelected(SelectionEvent e) {
                 	if (e.widget.getData("icon").toString().regionMatches(false, 6, "b", 0, 1)) {
                 		// to get here the button needs to be unclicked 
-                		// (e.widget.getData("icon").toString() is "icons/black.png" in this case)
-                		// for performance reasons only the 6. char of the string is checked
+                		// (in this case e.widget.getData("icon").toString() is "icons/black.png")
+                		// for performance reasons only the 7. char of the string is checked
 	                    final int btnNummer = (Integer) e.widget.getData("nummer"); //$NON-NLS-1$
 	                    logic.btnMainClick(btnNummer);
                 	}
@@ -348,8 +352,7 @@ public class AndroidUnlockPattern extends ViewPart {
         centerbox.addPaintListener(new PaintListener() {
             @Override
             public void paintControl(PaintEvent e) {
-
-                drawLines(e);
+            	drawLines(e);
             }
 
         });
@@ -372,7 +375,7 @@ public class AndroidUnlockPattern extends ViewPart {
             @Override
             public void widgetSelected(SelectionEvent e) {
                 logic.setModus(2);
-                getStatusText().setText("");
+                setStatusText("");
             }
 
             @Override
@@ -386,7 +389,7 @@ public class AndroidUnlockPattern extends ViewPart {
             @Override
             public void widgetSelected(SelectionEvent e) {
                 logic.setModus(3);
-                getStatusText().setText("");
+                setStatusText("");
             }
 
             @Override
@@ -403,7 +406,6 @@ public class AndroidUnlockPattern extends ViewPart {
         e.gc.setForeground(logic.getLineColor());
         e.gc.setLineWidth(10);
         for (int[] point : logic.getPoints()) {
-
             e.gc.drawLine(point[0], point[1], point[2], point[3]);
         }
 
@@ -530,10 +532,19 @@ public class AndroidUnlockPattern extends ViewPart {
 
     public void centerResize() {
         // centerButtons
-
-        int size = java.lang.Math.min(cntrBtn[0].getSize().x, cntrBtn[0].getSize().y);
-        if (size > 10) {
-            size -= 8;
+    	GridLayout layout = (GridLayout)centerbox.getLayout();
+    	int size = Math.min(
+    			centerbox.getClientArea().height - layout.marginHeight * 2 - layout.horizontalSpacing * 3 - statusText.getClientArea().height,
+    			centerbox.getClientArea().width - layout.marginWidth * 2 - layout.verticalSpacing * 2);
+        if (size < 0) return;	//Layout not yet initialized
+        size = size / 3;	// 3x3 centrcalBtns
+//        for(int i = 0; i < 9; i++)
+//        	cntrBtn[i].setLayoutData(new GridData(size, size));
+//        cntrBtn[0].setLayoutData(new GridData(size, size));
+    	
+//        int size = java.lang.Math.min(cntrBtn[0].getSize().x, cntrBtn[0].getSize().y);
+//        if (size > 10) {
+//            size -= 8;
             logic.recalculateLines();
             for (int i = 0; i < cntrBtn.length; i++) {
                 if (cntrBtn[i].getData("icon") != null) { //$NON-NLS-1$
@@ -545,16 +556,22 @@ public class AndroidUnlockPattern extends ViewPart {
                 regionCircle = new Region();
                 regionCircle.add(circle(size / 2, cntrBtn[i].getBounds().width / 2, cntrBtn[i].getBounds().height / 2));
 
-                cntrBtn[i].setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true));
                 cntrBtn[i].setRegion(regionCircle);
+//                cntrBtn[i].setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true));
+                cntrBtn[i].setLayoutData(new GridData(size, size));
             }
-        }
+//        }
     }
     
     public void Reset() {
     	logic.btnResetClick();
     }
-	protected StyledText getStatusText() {
-		return statusText;
+//	protected StyledText getStatusText() {
+//		return statusText;
+//	}
+	
+	protected void setStatusText(String message) {
+		statusText.setText(message);
+		statusText.pack(true);
 	}
 }
