@@ -606,39 +606,16 @@ public class Backend {
 		}
 		for (int i = 0; i < lines.length; i++) {
 			if (lines[i][0] != 0 && lines[i][1] != 0) {
-				points[i][0] = getCoordinates(lines[i][0])[0];
-				points[i][1] = getCoordinates(lines[i][0])[1];
-				points[i][2] = getCoordinates(lines[i][1])[0];
-				points[i][3] = getCoordinates(lines[i][1])[1];
+//				points[i][0] = getCoordinates(lines[i][0])[0];
+//				points[i][1] = getCoordinates(lines[i][0])[1];
+//				points[i][2] = getCoordinates(lines[i][1])[0];
+//				points[i][3] = getCoordinates(lines[i][1])[1];
+				points[i][0] = visual.getCntrBtn()[lines[i][0]-1].getLocation().x + visual.getCntrBtn()[lines[i][0]-1].getSize().x / 2;
+				points[i][1] = visual.getCntrBtn()[lines[i][0]-1].getLocation().y + visual.getCntrBtn()[lines[i][0]-1].getSize().y / 2;
+				points[i][2] = visual.getCntrBtn()[lines[i][1]-1].getLocation().x + visual.getCntrBtn()[lines[i][1]-1].getSize().x / 2;
+				points[i][3] = visual.getCntrBtn()[lines[i][1]-1].getLocation().y + visual.getCntrBtn()[lines[i][1]-1].getSize().y / 2;
 			}
 		}
-	}
-
-	private int[] getCoordinates(int btn) {
-		int xy[] = new int[2];
-		
-//		if (btn % 3 == 1) {
-//			xy[0] = visual.getCntrBtn()[0].getSize().x / 2;
-//		} else if (btn % 3 == 2) {
-//			xy[0] = visual.getCenterbox().getSize().x / 2;
-//		} else if (btn % 3 == 0) {
-//			xy[0] = visual.getCenterbox().getSize().x
-//					- visual.getCntrBtn()[0].getSize().x / 2;
-//		}
-//
-//		if (btn < 4 && btn > 0) {
-//			xy[1] = visual.getCntrBtn()[0].getSize().y / 2;
-//		} else if (btn < 7 && btn > 3) {
-//			xy[1] = visual.getCenterbox().getSize().y / 2;
-//		} else if (btn < 10 && btn > 6) {
-//			xy[1] = visual.getCenterbox().getSize().y
-//					- visual.getCntrBtn()[0].getSize().y / 2;
-//		}
-		
-		xy[0] = visual.getCntrBtn()[btn-1].getLocation().x + visual.getCntrBtn()[btn-1].getSize().x / 2;
-		xy[1] = visual.getCntrBtn()[btn-1].getLocation().y + visual.getCntrBtn()[btn-1].getSize().y / 2;
-
-		return xy;
 	}
 
 	public Color getLineColor() {
