@@ -1,0 +1,80 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+	<head>
+		<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+	</head>
+	<body>
+		<h1>Grafische Passwörter</h1>
+		<p>Das hier implementierte grafische Passwortverfahren ist dem Android Unlock-Pattern nachempfunden, mit dem man sich an Android-Smartphones anmelden kann. Dieses Verfahren im Folgenden genauer vorgestellt und die Sicherheit im Vergleich zur PIN-Eingabe analysiert. Anschließend werden einige weitere Methoden zur Erzeugung grafischer Passwörter vorgestellt.</p>
+		
+		<h2>Android Unlock-Pattern (AUP)</h2>
+		<p>Dieses Verfahren zur Erzeugung grafischer Passwörter wird bei dem Mobiltelefon-Betriebssystem Android seit Oktober 2008 in der Version 1.0<sup><a id="anker1" title="Zur Quelle" href="#fn1">[1]</a></sup> als Entsperrsystem eingesetzt. Ziel dieser Methode ist es, Unbefugten den Zugriff auf Daten des Telefons zu verweigern. Seit Android 2.2 ist diese Methode der Entsperrung nicht mehr die einzig verfügbare Methode: Es besteht nun auch die Möglichkeit, einen alpha-numerischen PIN anstatt des Android Unlock-Patterns zu verwenden.</p>
+		<p>Im Folgenden, gibt es einen kurzen Einblick in die Vorschriften zur Passworterstellung und die Sicherheit des AUP.</p>
+		
+		<h3>Passworterstellung</h3>
+		<p>Das Grundgerüst des AUP besteht neun Feldern, die in einer 3 mal 3 Matrix angeordnet sind. Die Passworteingabe erfolgt über das Verbinden der einzelnen Felder. Das dadurch entstandene Muster wird zum Entsperren verwendet.</p>
+		<p>Für die Konfiguration dieses Passwortes gibt es mehrere Einschränkungen:</p>
+		<ul>
+			<li>Das Passwort muss aus mindestens vier der neun möglichen Felder bestehen.</li>
+			<li>Jedes Feld darf nur einmal benutzt werden.</li>
+			<li>Verbindungen zwischen zwei Feldern, deren Verbindungsline ein ungenutztes Feld schneidet, können nicht durchgeführt werden.</li>
+			<li>Die Reihenfolge der besuchten Felder ist entscheidend.</li>
+		</ul>
+		<p><img src="pattern_to_short.png"></p>
+		<p><img src="pattern_valid.png"></p>
+		<p><img src="pattern_invalid.png"></p>
+		
+		<h3>Sicherheit</h3>
+		<p>Da auf vielen Smartphones ein vom Hersteller modifiziertes Android läuft, wird hier das Google Nexus S mit nicht-modifiziertem Android 2.3.4 als Referenzplattform verwendet. Nach fünfmaliger Falscheingabe des grafischen Passwortes muss der Benutzer 30 Sekunden warten. Nach fünf (weiteren????????) Fehlversuchen gibt es die Möglichkeit, das Smartphone mithilfe des zugehörigen Google-Passwortes zu entsperren. Zusätzlich kann der Benutzer noch weitere 15-mal versuchen, das Muster einzugeben. Nach jeweils fünf Fehlversuchen, muss 30 Sekunden gewartet werden. Nach Insgesamt 20 Fehlversuchen, wird nur noch das Google-Passwort zum Entsperren akzeptiert. Dies wird hier nicht näher betrachtet, da es sich dabei um ein textuelles-Passwort handelt.</p>
+		<p>Durch die Einschränkungen, die unter Passworterstellung genannt wurden, ergeben sich 389.112 mögliche Muster. Dieser Wert wurde durch ein Brute-Force Programm ermittelt.</p>
+		<p>Zum Vergleich: Bei einer vier bis 9 stelligen PIN, die aus Ziffern von 1 bis 9 gebildet werden kann und bei der jede Ziffer nur einmal vorkommen darf, gibt es 985.824 verschieden Möglichkeiten. Dies lässt sich durch folgende Formel berechnen:</p>
+		<p><img src="formula_pin_perm.png"></p>
+		<p>Dadurch, dass es beim AUP mehr Einschränkungen bezüglich der „Passwort“-Erstellung gibt, ist es gegen einen Brute-force-Angriff anfälliger als das oben als Vergleich angeführte PIN-System. In der Praxis ist ein Brute-force-Angriff über die reguläre Eingabe nicht möglich, da nach 20 Versuchen das Email-Passwort benötigt wird.</p>
+		
+		<h4>Nichttechnische Angriffe</h4>
+		<p>Shoulder Surfing</p>
+		<p>Als shoulder-surfing werden Angriffe bezeichnet, bei denen ein Angreifer einer Person, die ein Passwort kennt, zuschaut, wie diese Person das Passwort eingibt. Der Angreifer versucht dabei, das Passwort zu erkennen und es sich zu merken.</p>
+		
+		<p>smudge attacks</p>
+		<p>xxx</p>
+		
+		<p>Angriff auf die gespeicherten Daten</p>
+		<p>Wenn unsicher abgespeichert, kann man die Datei lesen und offline untersuchen. Dann geht auch ein Brute-force-Angriff. Wenn die Patterns nur gehasht sind (kein Salt, keine Wiederholung), xxxxxxxx</p>
+		
+		<h2>Andere Arten grafische Passwörter</h2>
+		<h3>Draw-a-Secret (DAS)</h3>
+		<p>Prinzip:</p>
+		<p>Das AUP eine Unterart von DAS.</p>
+		<p>Rahmenbedingungen:</p>
+		<p>DAS wird in der Regel, ebenso wie das AUP, auf Geräten mit einem Touchscreen eingesetzt. Bei DAS gibt es eine Matrix, auf der der Benutzer eine einfache 2D-Grafik zeichnet. Gespeichert wird, welche Felder der Benutzer berührt und in welcher Reihenfolge. Um sich zu authentisieren, muss der Benutzer die korrekten Felder in der richtigen Reihenfolge eingeben.</p>
+		<p>Der Erfinder der DAS schlägt eine Matrixgröße von fünf mal fünf vor.<sup><a id="anker2" title="Zur Quelle" href="#fn2">[2]</a></sup></p>
+		<p>Mögliche Angriffe:</p>
+		<ul>
+			<li>"Graphische Wörterbücher"</li>
+			<ul>
+				<li>Brute-Force (alle Möglichkeiten)</li>
+				<li>Spiegelsymmetrische Passwörter</li>
+				<ul>
+					<li>Benutzer merken sich spiegelsymmetrische Bilder besser als asymmetrische.<sup><a id="anker3" title="Zur Quelle" href="#fn3">[3]</a></sup><br>Dadurch kann man den Wortraum erheblich verkleinern --> weniger Sicherheit.</li>
+				</ul>
+			</ul>
+		</ul>
+		<p>Mögliche Abwehrmöglichkeiten:</p>
+		<ul>
+			<li>Längere Kombinationen vorschreiben</li>
+			<li>Größere Matrix</li>
+		</ul>
+		
+		<h3>Windows 8 Login</h3>
+		<p>Windows 8 wird vermutlich auch ein grafisches Passwort als Login-Möglichkeit haben.<sup><a id="anker4" title="Zur Quelle" href="#fn4">[4]</a></sup></p>
+		<p>Passface ???????????</p>
+		<hr>
+		<p>Fußnoten</p>
+		<ol>
+			<li id="fn1"><a href="#anker1" title="Zur Textstelle">[1]</a> http://android.git.kernel.org/?p=platform/frameworks/policies/base.git;a=tree;f=phone/com/android/internal/policy/impl;h=8d90808fbe9bca01c6c49659969ce7074f0b1f0a;hb=58096b60fc111564c663d685d3b147ea4a5f3832</li>
+			<li id="fn2"><a href="#anker2" title="Zur Textstelle">[2]</a> I. Jermyn, A. Mayer, F. Monrose, M. K. Reiter, and A. D. Rubin, "The Design and Analysis of Graphical Passwords," in Proceedings of the 8th USENIX Security Symposium, 1999.</li>
+			<li id="fn3"><a href="#anker3" title="Zur Textstelle">[3]</a> Xiaoyuan Suo, Ying Zhu, G. Scott. Owen: "Graphical Passwords: A Survey"</li>
+			<li id="fn4"><a href="#anker4" title="Zur Textstelle">[4]</a> http://www.recoverwindowspassword.com/reset-windows-8-password.htm</li>
+		</ol>
+	</body>
+</html>

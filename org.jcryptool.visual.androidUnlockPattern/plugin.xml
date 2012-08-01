@@ -29,21 +29,22 @@
          point="org.eclipse.ui.menus">
       <menuContribution
             allPopups="false"
-            locationURI="menu:org.jcryptool.visual.androidUnlockPattern.views.AndroidUnlockPattern">
+            locationURI="toolbar:org.jcryptool.visual.androidUnlockPattern.views.AndroidUnlockPattern">
          <command
                commandId="org.jcryptool.visual.androidUnlockPattern.RestartCommand"
                icon="platform:/plugin/org.eclipse.ui/icons/full/etool16/clear_co.gif"
-               style="push">
+               style="push"
+               tooltip="%command.RestartTooltip">
          </command>
       </menuContribution>
       <menuContribution
             allPopups="false"
             locationURI="toolbar:org.jcryptool.visual.androidUnlockPattern.views.AndroidUnlockPattern">
          <command
-               commandId="org.jcryptool.visual.androidUnlockPattern.RestartCommand"
-               icon="platform:/plugin/org.eclipse.ui/icons/full/etool16/clear_co.gif"
+               commandId="org.jcryptool.visual.androidUnlockPattern.HelpCommand"
+               icon="platform:/plugin/org.eclipse.ui/icons/full/etool16/help_contents.gif"
                style="push"
-               tooltip="%command.tooltip">
+               tooltip="%command.HelpTooltip">
          </command>
       </menuContribution>
    </extension>
@@ -51,7 +52,11 @@
          point="org.eclipse.ui.commands">
       <command
             id="org.jcryptool.visual.androidUnlockPattern.RestartCommand"
-            name="%command.name">
+            name="%command.RestartName">
+      </command>
+      <command
+            id="org.jcryptool.visual.androidUnlockPattern.HelpCommand"
+            name="%command.HelpName">
       </command>
    </extension>
    <extension
@@ -60,6 +65,23 @@
             class="org.jcryptool.visual.androidUnlockPattern.handlers.RestartHandler"
             commandId="org.jcryptool.visual.androidUnlockPattern.RestartCommand">
       </handler>
+      <handler
+            class="org.jcryptool.visual.androidUnlockPattern.handlers.HelpHandler"
+            commandId="org.jcryptool.visual.androidUnlockPattern.HelpCommand">
+      </handler>
+   </extension>
+   <extension
+         point="org.eclipse.help.toc">
+      <toc
+            file="$nl$/help/toc.xml"
+            primary="false">
+      </toc>
+   </extension>
+   <extension
+         point="org.eclipse.help.contexts">
+      <contexts
+            file="$nl$/contexts.xml">
+      </contexts>
    </extension>
 
 </plugin>

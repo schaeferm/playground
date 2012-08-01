@@ -24,11 +24,12 @@ import org.eclipse.swt.widgets.Group;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Listener;
 import org.eclipse.swt.widgets.MessageBox;
+import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.part.ViewPart;
 
 import org.jcryptool.core.util.fonts.FontService;
 import org.eclipse.wb.swt.SWTResourceManager;
-import org.jcryptool.visual.androidUnlockPattern.Activator;
+import org.jcryptool.visual.androidUnlockPattern.AndroidUnlockPatternPlugin;
 
 /**
  * 
@@ -61,22 +62,7 @@ public class AndroidUnlockPattern extends ViewPart {
     private Label textFeld;
     private StyledText statusText;
     //private Canvas canv;
-    
-    /*
-     * The content provider class is responsible for providing objects to the view. It can wrap existing objects in
-     * adapters or simply return objects as-is. These objects may be sensitive to the current input of the view, or
-     * ignore it and always show the same content (like Task List, for example).
-     */
-
-    /*
-     * class ViewContentProvider implements IStructuredContentProvider { public void inputChanged(Viewer v, Object
-     * oldInput, Object newInput) { } public void dispose() { } public Object[] getElements(Object parent) { return new
-     * String[] { "One", "Twoo", "Three" }; } } class ViewLabelProvider extends LabelProvider implements
-     * ITableLabelProvider { public String getColumnText(Object obj, int index) { return getText(obj); } public Image
-     * getColumnImage(Object obj, int index) { return getImage(obj); } public Image getImage(Object obj) { return
-     * PlatformUI.getWorkbench().getSharedImages() .getImage(ISharedImages.IMG_OBJ_ELEMENT); } } class NameSorter
-     * extends ViewerSorter { }
-     */
+    private Composite parent;
 
     /**
      * The constructor.
@@ -91,10 +77,12 @@ public class AndroidUnlockPattern extends ViewPart {
      * @param parent a swt Composite, which is the parent..
      */
     public void createPartControl(Composite parent) {
-        // parent
-        // parent.setLayout(new FormLayout());
+    	this.parent = parent;
         parent.setBackground(new org.eclipse.swt.graphics.Color(null, 0, 0, 0));
 
+        //set context help
+        PlatformUI.getWorkbench().getHelpSystem().setHelp(parent, AndroidUnlockPatternPlugin.PLUGIN_ID + ".ContextHelpView"); //$NON-NLS-1$
+        
         // Create the ScrolledComposite to scroll horizontally and vertically
         final ScrolledComposite sc = new ScrolledComposite(parent, SWT.H_SCROLL | SWT.V_SCROLL);
         // Create a child composite to hold the controls
@@ -290,7 +278,7 @@ public class AndroidUnlockPattern extends ViewPart {
             cntrBtn[i].addSelectionListener(new SelectionListener() {
                 @Override
                 public void widgetSelected(SelectionEvent e) {
-                	if (e.widget.getData("icon").toString().regionMatches(false, 6, "b", 0, 1)) {
+                	if (e.widget.getData("icon").toString().regionMatches(false, 6, "b", 0, 1)) { //$NON-NLS-1$ //$NON-NLS-2$
                 		// to get here the button needs to be unclicked 
                 		// (in this case e.widget.getData("icon").toString() is "icons/black.png")
                 		// for performance reasons only the 7. char of the string is checked
@@ -375,7 +363,7 @@ public class AndroidUnlockPattern extends ViewPart {
             @Override
             public void widgetSelected(SelectionEvent e) {
                 logic.setModus(2);
-                setStatusText("");
+                setStatusText(""); //$NON-NLS-1$
             }
 
             @Override
@@ -389,7 +377,7 @@ public class AndroidUnlockPattern extends ViewPart {
             @Override
             public void widgetSelected(SelectionEvent e) {
                 logic.setModus(3);
-                setStatusText("");
+                setStatusText(""); //$NON-NLS-1$
             }
 
             @Override
@@ -415,7 +403,7 @@ public class AndroidUnlockPattern extends ViewPart {
      * Passing the focus request to the viewer's control.
      */
     public void setFocus() {
-        btnSave.setFocus();
+    	parent.setFocus();
     }
 
     public int MsgBox(String header, String msg, int options) {
@@ -550,7 +538,7 @@ public class AndroidUnlockPattern extends ViewPart {
                 if (cntrBtn[i].getData("icon") != null) { //$NON-NLS-1$
                     String tmpStr = cntrBtn[i].getData("icon").toString(); //$NON-NLS-1$
                     //ImageData tmp = new ImageData(tmpStr).scaledTo(size, size);
-                    ImageData tmp = Activator.getImageDescriptor(tmpStr).getImageData().scaledTo(size, size);
+                    ImageData tmp = AndroidUnlockPatternPlugin.getImageDescriptor(tmpStr).getImageData().scaledTo(size, size);
                     cntrBtn[i].setImage(new Image(cntrBtn[i].getDisplay(), tmp));
                 }
                 regionCircle = new Region();
@@ -566,9 +554,6 @@ public class AndroidUnlockPattern extends ViewPart {
     public void Reset() {
     	logic.btnResetClick();
     }
-//	protected StyledText getStatusText() {
-//		return statusText;
-//	}
 	
 	protected void setStatusText(String message) {
 		statusText.setText(message);

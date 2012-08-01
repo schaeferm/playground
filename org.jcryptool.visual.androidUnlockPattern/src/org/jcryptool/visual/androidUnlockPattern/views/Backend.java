@@ -14,7 +14,7 @@ import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Display;
 import org.jcryptool.core.logging.utils.LogUtil;
-import org.jcryptool.visual.androidUnlockPattern.Activator;
+import org.jcryptool.visual.androidUnlockPattern.AndroidUnlockPatternPlugin;
 
 /**
  * 
@@ -144,7 +144,7 @@ public class Backend {
 			for (int i = 0; i < ordersaved.length; i++) {
 				ordersaved[i] = 0;
 			}
-			visual.setStatusText("");
+			visual.setStatusText(""); //$NON-NLS-1$
 			resetBtn();
 			resetOrder();
 			save();
@@ -190,7 +190,7 @@ public class Backend {
 				visual.getBtnSave().setText(
 						Messages.AndroidUnlockPattern_ButtonSaveText);
 				visual.getTextFeld().setText(Messages.Backend_TEXT_SET_SECOND);
-				visual.setStatusText("");
+				visual.setStatusText(""); //$NON-NLS-1$
 				resetBtn();
 				resetOrder();
 			} else if (Arrays.equals(ordertmp, order)) {
@@ -270,7 +270,7 @@ public class Backend {
 		
 		//reset text only when order comes from user
 //		if(!silent) visual.getStatusLabel().setText("");
-		visual.setStatusText("");
+		visual.setStatusText(""); //$NON-NLS-1$
 	}
 
 	/**
@@ -444,20 +444,20 @@ public class Backend {
 			for (int i = 0; i < order.length; i++) {
 				if (order[i] != 0) {
 					if (farbe == GELB) {
-						Image img = Activator
+						Image img = AndroidUnlockPatternPlugin
 								.getImageDescriptor("icons/yellow.png").createImage(visual.getCntrBtn()[i].getDisplay()); //$NON-NLS-1$
 						visual.getCntrBtn()[order[i] - 1].setImage(img);
 						visual.getCntrBtn()[order[i] - 1].setData(
 								"icon", "icons/yellow.png"); //$NON-NLS-1$ //$NON-NLS-2$
 					} else if (farbe == ROT) {
-						Image img = Activator
+						Image img = AndroidUnlockPatternPlugin
 								.getImageDescriptor("icons/red.png").createImage(visual.getCntrBtn()[i].getDisplay()); //$NON-NLS-1$
 						visual.getCntrBtn()[order[i] - 1].setImage(img);
 						visual.getCntrBtn()[order[i] - 1].setData(
 								"icon", "icons/red.png"); //$NON-NLS-1$ //$NON-NLS-2$
 
 					} else if (farbe == GRUEN) {
-						Image img = Activator
+						Image img = AndroidUnlockPatternPlugin
 								.getImageDescriptor("icons/green.png").createImage(visual.getCntrBtn()[i].getDisplay()); //$NON-NLS-1$
 						visual.getCntrBtn()[order[i] - 1].setImage(img);
 						visual.getCntrBtn()[order[i] - 1].setData(
@@ -471,7 +471,7 @@ public class Backend {
 			}
 		} else {
 			for (Button btn : visual.getCntrBtn()) {
-				Image img = Activator
+				Image img = AndroidUnlockPatternPlugin
 						.getImageDescriptor("icons/black.png").createImage(btn.getDisplay()); //$NON-NLS-1$
 				btn.setData("icon", "icons/black.png"); //$NON-NLS-1$ //$NON-NLS-2$
 				btn.setImage(img);
