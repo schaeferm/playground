@@ -15,6 +15,7 @@ import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Display;
 import org.jcryptool.core.logging.utils.LogUtil;
 import org.jcryptool.visual.androidUnlockPattern.AndroidUnlockPatternPlugin;
+import org.jcryptool.visual.androidUnlockPattern.views.AndroidUnlockPattern.ApuState;
 
 /**
  * 
@@ -109,14 +110,14 @@ public class Backend {
 		if (!isValid()) {
 			setColor(ROT);
 			visual.getBtnSave().setEnabled(false);
-			visual.setStatusText(Messages.Backend_InfoTextInvalid);
+			visual.setStatusText(Messages.Backend_InfoTextInvalid, ApuState.ERROR);
 		} else if (!isGreatEnough()) {
 			setColor(GELB);
-			visual.setStatusText(Messages.Backend_TEXT_TO_SHORT);
+			visual.setStatusText(Messages.Backend_TEXT_TO_SHORT, ApuState.WARNING);
 		} else {
 			setColor(GRUEN);
 			visual.getBtnSave().setEnabled(true);
-			visual.setStatusText(Messages.Backend_TEXT_VALID);
+			visual.setStatusText(Messages.Backend_TEXT_VALID, ApuState.INFO);
 		}
 		if (length > 1) {
 			for (int[] line : lines) {
@@ -144,7 +145,7 @@ public class Backend {
 			for (int i = 0; i < ordersaved.length; i++) {
 				ordersaved[i] = 0;
 			}
-			visual.setStatusText(""); //$NON-NLS-1$
+			visual.setStatusText("", null); //$NON-NLS-1$
 			resetBtn();
 			resetOrder();
 			save();
@@ -190,19 +191,19 @@ public class Backend {
 				visual.getBtnSave().setText(
 						Messages.AndroidUnlockPattern_ButtonSaveText);
 				visual.getTextFeld().setText(Messages.Backend_TEXT_SET_SECOND);
-				visual.setStatusText(""); //$NON-NLS-1$
+				visual.setStatusText("", null); //$NON-NLS-1$
 				resetBtn();
 				resetOrder();
 			} else if (Arrays.equals(ordertmp, order)) {
 				saveOrder();
-				visual.setStatusText(Messages.Backend_PopupSavedMessage);
+				visual.setStatusText(Messages.Backend_PopupSavedMessage, ApuState.INFO);
 				resetBtn();
 				resetOrder();
 				setModus(3);
 			} else {
 				// MsgBox unequal pattern or Error
 				btnCancelClick();
-				visual.setStatusText(Messages.Backend_PopupNotSavedMessage);
+				visual.setStatusText(Messages.Backend_PopupNotSavedMessage, ApuState.ERROR);
 			}
 		} else {
 			btnCancelClick();
@@ -217,14 +218,14 @@ public class Backend {
 	 */
 	private boolean checkPattern() {
 		if (Arrays.equals(order, ordersaved)) {
-			visual.setStatusText(Messages.Backend_PopupValidMessage);
+			visual.setStatusText(Messages.Backend_PopupValidMessage, ApuState.OK);
 			resetBtn();
 			resetOrder();
 			tryCount = 0;
 			return true;
 		} else {
 			tryCount++;
-			visual.setStatusText(String.format(Messages.Backend_PopupWrongMessage, tryCount));
+			visual.setStatusText(String.format(Messages.Backend_PopupWrongMessage, tryCount), ApuState.ERROR);
 			resetBtn();
 			resetOrder();
 			
@@ -270,7 +271,7 @@ public class Backend {
 		
 		//reset text only when order comes from user
 //		if(!silent) visual.getStatusLabel().setText("");
-		visual.setStatusText(""); //$NON-NLS-1$
+		visual.setStatusText("", null); //$NON-NLS-1$
 	}
 
 	/**
