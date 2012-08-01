@@ -588,24 +588,24 @@ public class AndroidUnlockPattern extends ViewPart {
 	protected void setStatusText(String message, ApuState state) {
 		if(state == null) {
 			statusText.setImage(null);
-//			statusText.setForeground(SWTResourceManager.getColor(SWT.COLOR_BLACK));
+			statusText.setForeground(SWTResourceManager.getColor(SWT.COLOR_BLACK));
 		} else {
 		switch (state) {
 			case ERROR:
 				statusText.setImage(AndroidUnlockPatternPlugin.imageDescriptorFromPlugin("org.eclipse.ui", "/icons/full/obj16/error_tsk.gif").createImage());
-//				statusText.setForeground(SWTResourceManager.getColor(SWT.COLOR_RED));
+				statusText.setForeground(SWTResourceManager.getColor(SWT.COLOR_DARK_RED));
 				break;
 			case WARNING:
 				statusText.setImage(AndroidUnlockPatternPlugin.imageDescriptorFromPlugin("org.eclipse.ui", "/icons/full/obj16/warn_tsk.gif").createImage());
-//				statusText.setForeground(SWTResourceManager.getColor(SWT.COLOR_YELLOW));
+				statusText.setForeground(SWTResourceManager.getColor(SWT.COLOR_DARK_YELLOW));
 				break;
 			case INFO:
 				statusText.setImage(AndroidUnlockPatternPlugin.imageDescriptorFromPlugin("org.eclipse.ui", "/icons/full/obj16/info_tsk.gif").createImage());
-//				statusText.setForeground(SWTResourceManager.getColor(SWT.COLOR_BLACK));
+				statusText.setForeground(SWTResourceManager.getColor(SWT.COLOR_BLACK));
 				break;
 			case OK:
 				statusText.setImage(AndroidUnlockPatternPlugin.getImageDescriptor("/icons/ok_st_obj.gif").createImage());
-//				statusText.setForeground(SWTResourceManager.getColor(SWT.COLOR_GREEN));
+				statusText.setForeground(SWTResourceManager.getColor(SWT.COLOR_DARK_GREEN));
 				break;
 			default:
 				statusText.setImage(null);
