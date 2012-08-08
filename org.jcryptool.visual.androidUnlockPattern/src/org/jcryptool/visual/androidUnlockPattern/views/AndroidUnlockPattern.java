@@ -612,6 +612,5 @@ public class AndroidUnlockPattern extends ViewPart {
 			}
 		}
 		statusText.setText(message);
-		statusText.pack(true);
 	}
 }
