@@ -51,7 +51,7 @@ public class AndroidUnlockPattern extends ViewPart {
 	private Composite controlBox;
 	private Group helpBox;
 	private Group optionbox;
-	// private StyledText stDescription;
+	// private Label stDescription;
 	private Button[] cntrBtn = new Button[9];
 	private Region regionCircle;
 	private Button setPattern;
@@ -59,9 +59,11 @@ public class AndroidUnlockPattern extends ViewPart {
 	private Button checkPattern;
 	private Button btnSave;
 	private Button btnCancel;
-	private Label helpFeld;
+	private Label descText;
 	private Backend logic;
-	private Label textFeld;
+	private Label instrText1;
+	private Label instrText2;
+	private Label instrText3;
 	private CLabel statusText;
 	// private Canvas canv;
 	private Composite parent;
@@ -110,14 +112,12 @@ public class AndroidUnlockPattern extends ViewPart {
 		centerbox = new Group(child, SWT.NONE);
 		centerbox.setText(Messages.AndroidUnlockPattern_centerbox_text);
 		optionbox = new Group(controlBox, SWT.NONE);
-		optionbox
-				.setToolTipText(Messages.AndroidUnlockPattern_optionbox_toolTipText);
+		optionbox.setToolTipText(Messages.AndroidUnlockPattern_optionbox_toolTipText);
 		helpBox = new Group(child, SWT.NONE);
 		helpBox.setToolTipText(Messages.AndroidUnlockPattern_helpBox_toolTipText);
 		helpBox.setText(Messages.AndroidUnlockPattern_GroupHeadingHelp);
 		setPattern = new Button(optionbox, SWT.RADIO);
-		GridData gd_setPattern = new GridData(SWT.FILL, SWT.FILL, false, false,
-				1, 1);
+		GridData gd_setPattern = new GridData(SWT.FILL, SWT.FILL, false, false, 1, 1);
 		gd_setPattern.widthHint = 56;
 		gd_setPattern.minimumHeight = 30;
 		gd_setPattern.minimumWidth = 30;
@@ -135,8 +135,7 @@ public class AndroidUnlockPattern extends ViewPart {
 
 		statusText = new CLabel(centerbox, SWT.LEFT);
 		// statusText.setBackground(SWTResourceManager.getColor(240, 240, 240));
-		statusText.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, false,
-				3, 1));
+		statusText.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, false, 3, 1));
 
 		setPattern.setText(Messages.AndroidUnlockPattern_ModeSetText);
 		changePattern.setText(Messages.AndroidUnlockPattern_ModeChangeText);
@@ -149,7 +148,8 @@ public class AndroidUnlockPattern extends ViewPart {
 		centerResize();
 
 		logic.init();
-		child.pack();
+		child.pack();	//update the size of the visuals child's
+//		child.layout(true);
 	}
 
 	/**
@@ -157,8 +157,7 @@ public class AndroidUnlockPattern extends ViewPart {
 	 */
 	private void initLayout() {
 
-		headingBox.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, false,
-				2, 1));
+		headingBox.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, false, 2, 1));
 		headingBox.setLayout(new FormLayout());
 		final FormData fd_headingBox = new FormData(-1, -1);
 		fd_headingBox.left = new FormAttachment(0);
@@ -169,10 +168,10 @@ public class AndroidUnlockPattern extends ViewPart {
 		// top
 		controlBox.setLayout(new FormLayout());
 		final FormData fd_controlBox = new FormData(-1, -1);
+		fd_controlBox.bottom = new FormAttachment(centerbox, 0, SWT.BOTTOM);
+		fd_controlBox.top = new FormAttachment(headingBox, 6);
 		fd_controlBox.right = new FormAttachment(centerbox, -6);
 		fd_controlBox.left = new FormAttachment(0);
-		fd_controlBox.top = new FormAttachment(headingBox, 6);
-		fd_controlBox.bottom = new FormAttachment(100, -122);
 		controlBox.setLayoutData(fd_controlBox);
 
 		// optionbox
@@ -197,8 +196,7 @@ public class AndroidUnlockPattern extends ViewPart {
 		// btnCheck = new Button(bottombox, SWT.None);
 		btnCancel = new Button(controlBox, SWT.NONE);
 		btnCancel.setEnabled(false);
-		btnCancel
-				.setToolTipText(Messages.AndroidUnlockPattern_btnCancel_toolTipText);
+		btnCancel.setToolTipText(Messages.AndroidUnlockPattern_btnCancel_toolTipText);
 		FormData fd_btnCancel = new FormData();
 		fd_btnCancel.top = new FormAttachment(btnSave, 6);
 		fd_btnCancel.right = new FormAttachment(optionbox, 0, SWT.RIGHT);
@@ -214,8 +212,8 @@ public class AndroidUnlockPattern extends ViewPart {
 		clayout.verticalSpacing = 15;
 		centerbox.setLayout(clayout);
 		final FormData fdCb = new FormData(0, 0);
+		fdCb.bottom = new FormAttachment(100, -163);
 		fdCb.top = new FormAttachment(headingBox, 6);
-		fdCb.bottom = new FormAttachment(controlBox, 0, SWT.BOTTOM);
 		fdCb.left = new FormAttachment(0, 156);
 		fdCb.right = new FormAttachment(100, -10);
 
@@ -230,32 +228,32 @@ public class AndroidUnlockPattern extends ViewPart {
 		new Label(centerbox, SWT.NONE);
 		new Label(centerbox, SWT.NONE);
 		new Label(centerbox, SWT.NONE);
-
-		// bottombox
-		helpBox.setLayout(new FormLayout());
+		helpBox.setLayout(new GridLayout(2, true));
 		final FormData fd_helpBox = new FormData(180, -1);
-		fd_helpBox.right = new FormAttachment(headingBox, -10, SWT.RIGHT);
-		fd_helpBox.left = new FormAttachment(controlBox, 10, SWT.LEFT);
-		fd_helpBox.top = new FormAttachment(controlBox, 6);
+		fd_helpBox.top = new FormAttachment(centerbox, 6);
 		fd_helpBox.bottom = new FormAttachment(100, -10);
+		fd_helpBox.left = new FormAttachment(0, 10);
+		fd_helpBox.right = new FormAttachment(100, -10);
 		helpBox.setLayoutData(fd_helpBox);
 
-		textFeld = new Label(helpBox, SWT.WRAP);
-		FormData fd_textFeld = new FormData();
-		fd_textFeld.top = new FormAttachment(0, 10);
-		fd_textFeld.left = new FormAttachment(0, 10);
-		fd_textFeld.right = new FormAttachment(100, -10);
-		textFeld.setLayoutData(fd_textFeld);
-		textFeld.setAlignment(SWT.LEFT);
-		textFeld.setText(Messages.TEXT_SET_INITIAL);
-		helpFeld = new Label(helpBox, SWT.WRAP | SWT.SHADOW_NONE);
-		FormData fd_helpFeld = new FormData();
-		fd_helpFeld.right = new FormAttachment(textFeld, 0, SWT.RIGHT);
-		fd_helpFeld.top = new FormAttachment(textFeld, 6);
-		fd_helpFeld.left = new FormAttachment(0, 10);
-		fd_helpFeld.bottom = new FormAttachment(100, -7);
-		helpFeld.setLayoutData(fd_helpFeld);
-		helpFeld.setText(Messages.AndroidUnlockPattern_HelpTextInit);
+		instrText1 = new Label(helpBox, SWT.READ_ONLY | SWT.WRAP);
+		instrText1.setLayoutData(new GridData(SWT.LEFT, SWT.CENTER, true, false, 1, 1));
+		instrText1.setAlignment(SWT.LEFT);
+		instrText1.setText(Messages.Mode_Set_1);
+		
+		descText = new Label(helpBox, SWT.WRAP);
+		descText.setLayoutData(new GridData(SWT.LEFT, SWT.TOP, true, false, 1, 3));
+		descText.setText(Messages.AndroidUnlockPattern_HelpTextInit);
+		
+		instrText2 = new Label(helpBox, SWT.READ_ONLY | SWT.WRAP);
+		instrText2.setLayoutData(new GridData(SWT.LEFT, SWT.CENTER, true, false, 1, 1));
+		instrText2.setAlignment(SWT.LEFT);
+		instrText2.setText(Messages.Mode_Set_1);
+		
+		instrText3 = new Label(helpBox, SWT.READ_ONLY | SWT.WRAP);
+		instrText3.setLayoutData(new GridData(SWT.LEFT, SWT.CENTER, true, false, 1, 1));
+		instrText3.setAlignment(SWT.LEFT);
+		instrText3.setText(Messages.Mode_Set_1);
 
 	}
 
@@ -437,9 +435,9 @@ public class AndroidUnlockPattern extends ViewPart {
 	/**
 	 * sets Text into the standard Textfield/Label
 	 */
-	protected void setText(String string) {
-		textFeld.setText(string);
-	}
+//	protected void setText(String string) {
+//		instrText1.setText(string);
+//	}
 
 	public void setBtnSaveText(String text) {
 		btnSave.setText(text);
@@ -519,12 +517,9 @@ public class AndroidUnlockPattern extends ViewPart {
 	// return btnCheck;
 	// }
 
-	/**
-	 * @return the textFeld
-	 */
-	protected Label getTextFeld() {
-		return textFeld;
-	}
+//	protected Label getTextFeld() {
+//		return instrText1;
+//	}
 
 	/**
 	 * @return the centerbox
@@ -612,5 +607,57 @@ public class AndroidUnlockPattern extends ViewPart {
 			}
 		}
 		statusText.setText(message);
+		//to avoid control from growing and to automatically lay out do not call pack(true) here
+	}
+
+	
+	/**
+	 * Updates the user progress information in the description box.
+	 */
+	protected void updateProgress() {
+		switch(logic.getModus()) {
+			case 1: {	// set				
+				if (logic.isFirst()) {
+						instrText1.setEnabled(true); 
+						instrText2.setEnabled(false);
+				} else {
+					instrText1.setEnabled(false); 
+					instrText2.setEnabled(true);
+				}
+				
+				instrText1.setText(String.format(Messages.AndroidUnlockPattern_Step, 1, Messages.Mode_Set_1));
+				instrText2.setText(String.format(Messages.AndroidUnlockPattern_Step, 2, Messages.Mode_Set_2));
+				instrText3.setText("");				
+				break;
+			}
+			case 2: {	// change
+				if (!logic.isChangeable()) {
+					instrText1.setEnabled(true); 
+					instrText2.setEnabled(false);
+					instrText3.setEnabled(false);
+				} else if (logic.isFirst()) {
+					instrText1.setEnabled(false); 
+					instrText2.setEnabled(true);
+					instrText3.setEnabled(false);
+				} else {
+					instrText1.setEnabled(false); 
+					instrText2.setEnabled(false);
+					instrText3.setEnabled(true);
+				}
+				
+				instrText1.setText(String.format(Messages.AndroidUnlockPattern_Step, 1, Messages.Mode_Change_1));
+				instrText2.setText(String.format(Messages.AndroidUnlockPattern_Step, 2, Messages.Mode_Change_2));
+				instrText3.setText(String.format(Messages.AndroidUnlockPattern_Step, 3, Messages.Mode_Set_2));
+				break;
+			}
+			case 3: {	// check
+				instrText1.setEnabled(true);
+				instrText1.setText(String.format(Messages.AndroidUnlockPattern_Step, 1, Messages.Mode_Check_1));
+				instrText2.setText("");
+				instrText3.setText("");
+				break;
+			}
+		}
+		helpBox.layout(true);
 	}
 }

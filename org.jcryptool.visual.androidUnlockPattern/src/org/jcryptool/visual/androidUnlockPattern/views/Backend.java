@@ -39,7 +39,7 @@ public class Backend {
 			SWT.COLOR_WIDGET_BACKGROUND);
 
 	private boolean isActive[] = new boolean[arrayLengthStd];
-	private boolean isChangable = false;
+	private boolean isChangeable = false;
 	private boolean first = true;
 //	private boolean cancelShowed = false;
 	private int modus;// 1=set;2=change;3=check
@@ -160,10 +160,10 @@ public class Backend {
 		if (modus == 1) { // set
 			setPattern();
 		} else if (modus == 2) { // change
-			if (!isChangable) {
+			if (!isChangeable) {
 				if (checkPattern()) {
-					isChangable = true;
-					visual.getTextFeld().setText(Messages.Backend_InfoTextNew);
+					isChangeable = true;
+					visual.updateProgress();
 					visual.getBtnSave().setEnabled(false);
 				}
 			} else {
@@ -172,7 +172,7 @@ public class Backend {
 
 		} else if (modus == 3) { // check
 			checkPattern();
-			modusChanged();
+			cancel();
 		} else {
 			visual.MsgBox(Messages.Backend_PopupErrorHeading,
 					Messages.Backend_PopupErrorMessage, SWT.ICON_ERROR
@@ -180,6 +180,11 @@ public class Backend {
 		}
 	}
 
+	/**
+	 * Checks if the inputed pattern is valid. If so it is in case of the <b>first input</b> temporary saved. 
+	 * In case of a <b>matching confirmation input</b> it is saved and the mode is changed to <i>check</i>.
+	 * In case of a <b>not matching confirmation input</b> the input is reseted and an information message is displayed in the status text.
+	 */
 	private void setPattern() {
 		if (isValid() && isGreatEnough()) {
 			if (first) {
@@ -188,18 +193,15 @@ public class Backend {
 				for (int i = 0; i < order.length; i++) {
 					ordertmp[i] = order[i];
 				}
-				visual.getBtnSave().setText(
-						Messages.AndroidUnlockPattern_ButtonSaveText);
-				visual.getTextFeld().setText(Messages.Backend_TEXT_SET_SECOND);
+				visual.getBtnSave().setText(Messages.AndroidUnlockPattern_ButtonSaveText);
+				visual.updateProgress();
 				visual.setStatusText("", null); //$NON-NLS-1$
-				resetBtn();
-				resetOrder();
+				cancel();
 			} else if (Arrays.equals(ordertmp, order)) {
 				saveOrder();
-				visual.setStatusText(Messages.Backend_PopupSavedMessage, ApuState.INFO);
-				resetBtn();
-				resetOrder();
+				cancel();
 				setModus(3);
+				visual.setStatusText(Messages.Backend_PopupSavedMessage, ApuState.INFO);
 			} else {
 				// MsgBox unequal pattern or Error
 				btnCancelClick();
@@ -245,29 +247,36 @@ public class Backend {
 		}
 
 	}
-
-//	public void btnCancelClick() {
-//		btnCancelClick(false);
-//	}
 	
-//	public void btnCancelClick(boolean silent) {
-	public void btnCancelClick() {
+	/**
+	 * Resets the user input and cleans up the Mainbutton area.
+	 */
+	public void cancel() {
 		resetBtn();
 		resetOrder();
+	}
+	
+	
+	/**
+	 * Simulated click to 'Cancel' button.<br>
+	 * Resets the user input, cleans up the Mainbutton area and deletes the status text + image.
+	 */
+	public void btnCancelClick() {
+		cancel();
 		//modusChanged();
 		
-		switch(modus) {
-		case 1: {
-			if (first) visual.getTextFeld().setText(Messages.TEXT_SET_INITIAL); 
-			else visual.getTextFeld().setText(Messages.Backend_TEXT_SET_SECOND);
-			break; }
-		case 2: {
-			if (!isChangable) visual.getTextFeld().setText(Messages.Backend_TEXT_CHANGE_INITIAL);
-			else if (first) visual.getTextFeld().setText(Messages.Backend_InfoTextNew);
-			else visual.getTextFeld().setText(Messages.Backend_TEXT_SET_SECOND);
-			break; }
-		case 3: visual.getTextFeld().setText(Messages.Backend_TEXT_CHECK_INITIAL); break;
-		}
+//		switch(modus) {
+//		case 1: {
+//			if (first) visual.getTextFeld().setText(Messages.Mode_Set_1); 
+//			else visual.getTextFeld().setText(Messages.Mode_Set_2);
+//			break; }
+//		case 2: {
+//			if (!isChangeable) visual.getTextFeld().setText(Messages.Mode_Change_1);
+//			else if (first) visual.getTextFeld().setText(Messages.Mode_Change_2);
+//			else visual.getTextFeld().setText(Messages.Mode_Set_2);
+//			break; }
+//		case 3: visual.getTextFeld().setText(Messages.Mode_Check_1); break;
+//		}
 		
 		//reset text only when order comes from user
 //		if(!silent) visual.getStatusLabel().setText("");
@@ -412,31 +421,29 @@ public class Backend {
 		return true;
 	}
 
+	/**
+	 * Resets the GUI and progress information to the initial state of the current mode.
+	 */
 	private void modusChanged() {
-		if (modus == 1) {
-			visual.getTextFeld().setText(Messages.TEXT_SET_INITIAL);
-			setColor(STANDARD);
-			visual.getBtnSave().setText(Messages.Backend_ButtonContinueText);
-			visual.getBtnSave().setEnabled(false);
-
-		} else if (modus == 2) {
-			visual.getTextFeld().setText(Messages.Backend_TEXT_CHANGE_INITIAL);
-			setColor(STANDARD);
-			visual.getBtnSave().setText(Messages.Backend_ButtonContinueText);
-			visual.getBtnSave().setEnabled(false);
-
-		} else if (modus == 3) {
-			visual.getTextFeld().setText(Messages.Backend_TEXT_CHECK_INITIAL);
-			setColor(STANDARD);
-			visual.getBtnSave().setText(Messages.Backend_ButtonCheckText);
-			visual.getBtnSave().setEnabled(false);
-		} else {
-			// Fehler
-		}
-		isChangable = false;
+		//cancel current operation
+		btnCancelClick();
+		
+		//reset progress
+		isChangeable = false;
 		first = true;
-		// resetBtn();
-		resetOrder();
+		setColor(STANDARD);
+		visual.getBtnSave().setEnabled(false);
+		
+		switch(modus) {
+			case 1:
+			case 2: {
+				visual.getBtnSave().setText(Messages.Backend_ButtonContinueText);
+				break;
+			}
+			case 3: visual.getBtnSave().setText(Messages.Backend_ButtonCheckText);
+		}
+		
+		visual.updateProgress();
 		updateModus();
 	}
 
@@ -511,9 +518,9 @@ public class Backend {
 	 * 
 	 */
 	public void updateModus() {
-		visual.getSetPattern().setEnabled(true);
-		visual.getChangePattern().setEnabled(true);
-		visual.getCheckPattern().setEnabled(true);
+//		visual.getSetPattern().setEnabled(true);
+//		visual.getChangePattern().setEnabled(true);
+//		visual.getCheckPattern().setEnabled(true);
 		if (getModus() == 1) { // Modus SET
 			visual.getSetPattern().setSelection(true);
 			visual.getChangePattern().setSelection(false);
@@ -621,5 +628,13 @@ public class Backend {
 
 	public Color getLineColor() {
 		return lineColor;
+	}
+	
+	protected boolean isChangeable() {
+		return isChangeable;
+	}
+	
+	protected boolean isFirst() {
+		return first;
 	}
 }
