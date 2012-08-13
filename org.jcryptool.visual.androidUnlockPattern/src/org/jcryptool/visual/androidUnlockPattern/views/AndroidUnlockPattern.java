@@ -84,7 +84,6 @@ public class AndroidUnlockPattern extends ViewPart {
 	 */
 	public void createPartControl(Composite parent) {
 		this.parent = parent;
-		parent.setBackground(new org.eclipse.swt.graphics.Color(null, 0, 0, 0));
 
 		// set context help
 		PlatformUI
