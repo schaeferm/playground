@@ -3,6 +3,8 @@ package org.jcryptool.visual.androidUnlockPattern.views;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.CLabel;
 import org.eclipse.swt.custom.ScrolledComposite;
+import org.eclipse.swt.events.MouseEvent;
+import org.eclipse.swt.events.MouseListener;
 import org.eclipse.swt.events.PaintEvent;
 import org.eclipse.swt.events.PaintListener;
 import org.eclipse.swt.events.SelectionEvent;
@@ -52,7 +54,7 @@ public class AndroidUnlockPattern extends ViewPart {
 	private Group helpBox;
 	private Group optionbox;
 	// private Label stDescription;
-	private Button[] cntrBtn = new Button[9];
+	private Label[] cntrBtn = new Label[9];
 	private Region regionCircle;
 	private Button setPattern;
 	private Button changePattern;
@@ -125,15 +127,12 @@ public class AndroidUnlockPattern extends ViewPart {
 		checkPattern = new Button(optionbox, SWT.RADIO);
 
 		for (int i = 0; i < cntrBtn.length; i++) {
-			cntrBtn[i] = new Button(centerbox, SWT.NONE);
+			cntrBtn[i] = new Label(centerbox, SWT.NONE);
 			cntrBtn[i].setData("nummer", i); //$NON-NLS-1$
-			cntrBtn[i].setSize(40, 40); // set initial size; will be updated
-										// during initiation
-
+			cntrBtn[i].setSize(40, 40); // set initial size; will be updated during initiation
 		}
 
 		statusText = new CLabel(centerbox, SWT.LEFT);
-		// statusText.setBackground(SWTResourceManager.getColor(240, 240, 240));
 		statusText.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, false, 3, 1));
 
 		setPattern.setText(Messages.AndroidUnlockPattern_ModeSetText);
@@ -215,6 +214,7 @@ public class AndroidUnlockPattern extends ViewPart {
 		fdCb.top = new FormAttachment(headingBox, 6);
 		fdCb.left = new FormAttachment(0, 156);
 		fdCb.right = new FormAttachment(100, -10);
+		centerbox.setLayoutData(fdCb);
 
 		Label heading = new Label(headingBox, SWT.NONE);
 		heading.setFont(FontService.getHeaderFont());
@@ -223,10 +223,7 @@ public class AndroidUnlockPattern extends ViewPart {
 		fd_heading.left = new FormAttachment(0, 10);
 		heading.setLayoutData(fd_heading);
 		heading.setText(Messages.AndroidUnlockPattern_Heading);
-		centerbox.setLayoutData(fdCb);
-		new Label(centerbox, SWT.NONE);
-		new Label(centerbox, SWT.NONE);
-		new Label(centerbox, SWT.NONE);
+		
 		helpBox.setLayout(new GridLayout(2, true));
 		final FormData fd_helpBox = new FormData(180, -1);
 		fd_helpBox.top = new FormAttachment(centerbox, 6);
@@ -288,26 +285,48 @@ public class AndroidUnlockPattern extends ViewPart {
 
 		// centrcalBtns
 		for (int i = 0; i < cntrBtn.length; i++) {
-			cntrBtn[i].addSelectionListener(new SelectionListener() {
+//			cntrBtn[i].addSelectionListener(new SelectionListener() {
+//				@Override
+//				public void widgetSelected(SelectionEvent e) {
+//					if (e.widget
+//							.getData("icon").toString().regionMatches(false, 6, "b", 0, 1)) { //$NON-NLS-1$ //$NON-NLS-2$
+//						// to get here the button needs to be unclicked
+//						// (in this case e.widget.getData("icon").toString() is
+//						// "icons/black.png")
+//						// for performance reasons only the 7. char of the
+//						// string is checked
+//						final int btnNummer = (Integer) e.widget
+//								.getData("nummer"); //$NON-NLS-1$
+//						logic.btnMainClick(btnNummer);
+//					}
+//				}
+//
+//				@Override
+//				public void widgetDefaultSelected(SelectionEvent e) {
+//
+//				}
+//			});
+			cntrBtn[i].addMouseListener(new MouseListener() {
+
 				@Override
-				public void widgetSelected(SelectionEvent e) {
-					if (e.widget
-							.getData("icon").toString().regionMatches(false, 6, "b", 0, 1)) { //$NON-NLS-1$ //$NON-NLS-2$
-						// to get here the button needs to be unclicked
-						// (in this case e.widget.getData("icon").toString() is
-						// "icons/black.png")
-						// for performance reasons only the 7. char of the
-						// string is checked
-						final int btnNummer = (Integer) e.widget
-								.getData("nummer"); //$NON-NLS-1$
+				public void mouseDoubleClick(MouseEvent e) {
+					
+				}
+
+				@Override
+				public void mouseDown(MouseEvent e) {
+					if (e.widget.getData("icon").toString().regionMatches(false, 6, "b", 0, 1)) { //$NON-NLS-1$ //$NON-NLS-2$
+						final int btnNummer = (Integer) e.widget.getData("nummer"); //$NON-NLS-1$
 						logic.btnMainClick(btnNummer);
 					}
+					
 				}
 
 				@Override
-				public void widgetDefaultSelected(SelectionEvent e) {
-
+				public void mouseUp(MouseEvent e) {
+					
 				}
+				
 			});
 		}
 
@@ -490,7 +509,7 @@ public class AndroidUnlockPattern extends ViewPart {
 	/**
 	 * @return the cntrBtn
 	 */
-	public Button[] getCntrBtn() {
+	public Label[] getCntrBtn() {
 		return cntrBtn;
 	}
 
@@ -546,19 +565,10 @@ public class AndroidUnlockPattern extends ViewPart {
 		if (size < 0)
 			return; // Layout not yet initialized
 		size = size / 3; // 3x3 centrcalBtns
-		// for(int i = 0; i < 9; i++)
-		// cntrBtn[i].setLayoutData(new GridData(size, size));
-		// cntrBtn[0].setLayoutData(new GridData(size, size));
-
-		// int size = java.lang.Math.min(cntrBtn[0].getSize().x,
-		// cntrBtn[0].getSize().y);
-		// if (size > 10) {
-		// size -= 8;
 		logic.recalculateLines();
 		for (int i = 0; i < cntrBtn.length; i++) {
 			if (cntrBtn[i].getData("icon") != null) { //$NON-NLS-1$
 				String tmpStr = cntrBtn[i].getData("icon").toString(); //$NON-NLS-1$
-				// ImageData tmp = new ImageData(tmpStr).scaledTo(size, size);
 				ImageData tmp = AndroidUnlockPatternPlugin
 						.getImageDescriptor(tmpStr).getImageData()
 						.scaledTo(size, size);
@@ -569,10 +579,9 @@ public class AndroidUnlockPattern extends ViewPart {
 					cntrBtn[i].getBounds().height / 2));
 
 			cntrBtn[i].setRegion(regionCircle);
-			// cntrBtn[i].setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true));
+//			cntrBtn[i].setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true));
 			cntrBtn[i].setLayoutData(new GridData(size, size));
 		}
-		// }
 	}
 
 	public void Reset() {

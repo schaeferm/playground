@@ -11,8 +11,8 @@ import java.util.Arrays;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.graphics.Color;
 import org.eclipse.swt.graphics.Image;
-import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Display;
+import org.eclipse.swt.widgets.Label;
 import org.jcryptool.core.logging.utils.LogUtil;
 import org.jcryptool.visual.androidUnlockPattern.AndroidUnlockPatternPlugin;
 import org.jcryptool.visual.androidUnlockPattern.views.AndroidUnlockPattern.ApuState;
@@ -131,10 +131,10 @@ public class Backend {
 		}
 	}
 
-	public void btnHelpClick() {
-		// TODO Auto-generated method stub
-
-	}
+//	public void btnHelpClick() {
+//		// TODO Auto-generated method stub
+//
+//	}
 
 	public void btnResetClick() {
 		int tmp = visual.MsgBox(Messages.Backend_PopupResetHeading,
@@ -153,7 +153,6 @@ public class Backend {
 		} else {
 			// nichts oder cancel? -> nichts
 		}
-
 	}
 
 	public void btnSaveClick() {
@@ -478,11 +477,11 @@ public class Backend {
 				}
 			}
 		} else {
-			for (Button btn : visual.getCntrBtn()) {
+			for (Label btn : visual.getCntrBtn()) {
 				Image img = AndroidUnlockPatternPlugin
 						.getImageDescriptor("icons/black.png").createImage(btn.getDisplay()); //$NON-NLS-1$
-				btn.setData("icon", "icons/black.png"); //$NON-NLS-1$ //$NON-NLS-2$
 				btn.setImage(img);
+				btn.setData("icon", "icons/black.png"); //$NON-NLS-1$ //$NON-NLS-2$
 
 			}
 			// lineColor=farbe;
@@ -491,7 +490,7 @@ public class Backend {
 	}
 
 	private void resetBtn() {
-		for (Button btn : visual.getCntrBtn()) {
+		for (Label btn : visual.getCntrBtn()) {
 			btn.setEnabled(true);
 		}
 		for (int[] line : lines) {
