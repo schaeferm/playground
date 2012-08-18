@@ -136,23 +136,18 @@ public class Backend {
 //
 //	}
 
-	public void btnResetClick() {
-		int tmp = visual.MsgBox(Messages.Backend_PopupResetHeading,
-				Messages.Backend_PopupResetMessage, SWT.YES | SWT.NO
-						| SWT.ICON_WARNING);
-		if (tmp == SWT.YES) {
+	/**
+	 * Resets all state information! Use with great care.
+	 */
+	public void reset() {
 			ordersaved = new int[10];
 			for (int i = 0; i < ordersaved.length; i++) {
 				ordersaved[i] = 0;
 			}
-			visual.setStatusText("", null); //$NON-NLS-1$
 			resetBtn();
 			resetOrder();
 			save();
 			setModus(1);
-		} else {
-			// nichts oder cancel? -> nichts
-		}
 	}
 
 	public void btnSaveClick() {

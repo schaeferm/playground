@@ -5,6 +5,7 @@ import org.eclipse.swt.custom.CLabel;
 import org.eclipse.swt.custom.ScrolledComposite;
 import org.eclipse.swt.events.MouseEvent;
 import org.eclipse.swt.events.MouseListener;
+import org.eclipse.swt.events.MouseTrackListener;
 import org.eclipse.swt.events.PaintEvent;
 import org.eclipse.swt.events.PaintListener;
 import org.eclipse.swt.events.SelectionEvent;
@@ -69,6 +70,7 @@ public class AndroidUnlockPattern extends ViewPart {
 	private CLabel statusText;
 	// private Canvas canv;
 	private Composite parent;
+	private Boolean patternInput = false;
 
 	/**
 	 * The constructor.
@@ -310,26 +312,50 @@ public class AndroidUnlockPattern extends ViewPart {
 
 				@Override
 				public void mouseDoubleClick(MouseEvent e) {
-					
 				}
 
 				@Override
 				public void mouseDown(MouseEvent e) {
+					patternInput = patternInput == true ? false : true;	//Toggle patternInput -> Toggle touch for input
 					if (e.widget.getData("icon").toString().regionMatches(false, 6, "b", 0, 1)) { //$NON-NLS-1$ //$NON-NLS-2$
+						// to get here the button needs to be unclicked
+						// (in this case e.widget.getData("icon").toString() is "icons/black.png")
+						// for performance reasons only the 7. char of the string is checked
 						final int btnNummer = (Integer) e.widget.getData("nummer"); //$NON-NLS-1$
 						logic.btnMainClick(btnNummer);
 					}
-					
 				}
 
 				@Override
 				public void mouseUp(MouseEvent e) {
-					
 				}
 				
 			});
-		}
+			cntrBtn[i].addMouseTrackListener(new MouseTrackListener() {
 
+				@Override
+				public void mouseEnter(MouseEvent e) {	
+					if (patternInput && e.widget.getData("icon").toString().regionMatches(false, 6, "b", 0, 1)) { //$NON-NLS-1$ //$NON-NLS-2$
+						final int btnNummer = (Integer) e.widget.getData("nummer"); //$NON-NLS-1$
+						logic.btnMainClick(btnNummer);
+					}
+				}
+
+				@Override
+				public void mouseExit(MouseEvent e) {
+				}
+
+				@Override
+				public void mouseHover(MouseEvent e) {
+//					System.out.println(e.stateMask);
+//					if((e.stateMask & SWT.BUTTON1) != 0)
+//						System.out.println("left down");
+//					if((e.stateMask & SWT.BUTTON2) != 0)	//1048576
+//						System.out.println("right down");
+				}
+			});
+		}
+		
 		btnSave.addSelectionListener(new SelectionListener() {
 
 			@Override
@@ -351,6 +377,7 @@ public class AndroidUnlockPattern extends ViewPart {
 			public void widgetSelected(SelectionEvent e) {
 				btnCancel.setEnabled(false);
 				btnSave.setEnabled(false);
+				patternInput = false;
 				logic.btnCancelClick();
 
 			}
@@ -584,8 +611,18 @@ public class AndroidUnlockPattern extends ViewPart {
 		}
 	}
 
-	public void Reset() {
-		logic.btnResetClick();
+	/**
+	 * Resets the state information of the plug-in. Asks the user first if he is really sure.
+	 */
+	public void resetClick() {
+		int tmp = MsgBox(Messages.Backend_PopupResetHeading,
+				Messages.Backend_PopupResetMessage, SWT.YES | SWT.NO
+						| SWT.ICON_WARNING);
+		if (tmp == SWT.YES) {
+			setStatusText("", null); //$NON-NLS-1$
+			patternInput = false;
+			logic.reset();
+		}
 	}
 
 	protected void setStatusText(String message, ApuState state) {

@@ -25,7 +25,7 @@ public class RestartHandler extends AbstractHandler {
     public Object execute(ExecutionEvent event) throws ExecutionException {
         if (HandlerUtil.getActivePart(event) instanceof AndroidUnlockPattern) {
         	AndroidUnlockPattern view = ((AndroidUnlockPattern) HandlerUtil.getActivePart(event));
-                view.Reset();
+                view.resetClick();
         }
 
         return null;
