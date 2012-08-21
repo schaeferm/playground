@@ -604,6 +604,7 @@ public class AndroidUnlockPattern extends ViewPart {
 		logic.recalculateLines();
 		for (int i = 0; i < cntrBtn.length; i++) {
 			if (cntrBtn[i].getData("icon") != null) { //$NON-NLS-1$
+				cntrBtn[i].getImage().dispose(); //dispose the old image
 				String tmpStr = cntrBtn[i].getData("icon").toString(); //$NON-NLS-1$
 				ImageData tmp = AndroidUnlockPatternPlugin
 						.getImageDescriptor(tmpStr).getImageData()
