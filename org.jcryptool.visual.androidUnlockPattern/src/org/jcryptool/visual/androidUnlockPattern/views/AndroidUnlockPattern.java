@@ -362,6 +362,7 @@ public class AndroidUnlockPattern extends ViewPart {
 			public void widgetSelected(SelectionEvent e) {
 				btnSave.setEnabled(false);
 				btnCancel.setEnabled(false);
+				patternInput = false;
 				logic.btnSaveClick();
 
 			}

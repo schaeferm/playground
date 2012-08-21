@@ -210,7 +210,7 @@ public class Backend {
 	}
 
 	/**
-	 * check ob eigegebenes pattern= gespeichertem, nur bestimmte oft.
+	 * Checks if entered pattern equals saved one. Counts also the failed check attempts.
 	 */
 	private boolean checkPattern() {
 		if (Arrays.equals(order, ordersaved)) {
