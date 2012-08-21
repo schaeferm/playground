@@ -71,6 +71,7 @@ public class AndroidUnlockPattern extends ViewPart {
 	// private Canvas canv;
 	private Composite parent;
 	private Boolean patternInput = false;
+	private Boolean inputFinished = false;
 
 	/**
 	 * The constructor.
@@ -316,8 +317,15 @@ public class AndroidUnlockPattern extends ViewPart {
 
 				@Override
 				public void mouseDown(MouseEvent e) {
-					patternInput = patternInput == true ? false : true;	//Toggle patternInput -> Toggle touch for input
-					if (e.widget.getData("icon").toString().regionMatches(false, 6, "b", 0, 1)) { //$NON-NLS-1$ //$NON-NLS-2$
+					//Toggle patternInput -> Toggle touch for input
+					//Lock input after 2nd click
+					if(patternInput) {
+						patternInput = false;
+						inputFinished = true;
+					}
+					else
+						patternInput = true;
+					if (!inputFinished && e.widget.getData("icon").toString().regionMatches(false, 6, "b", 0, 1)) { //$NON-NLS-1$ //$NON-NLS-2$
 						// to get here the button needs to be unclicked
 						// (in this case e.widget.getData("icon").toString() is "icons/black.png")
 						// for performance reasons only the 7. char of the string is checked
@@ -335,7 +343,7 @@ public class AndroidUnlockPattern extends ViewPart {
 
 				@Override
 				public void mouseEnter(MouseEvent e) {	
-					if (patternInput && e.widget.getData("icon").toString().regionMatches(false, 6, "b", 0, 1)) { //$NON-NLS-1$ //$NON-NLS-2$
+					if (patternInput && !inputFinished &&  e.widget.getData("icon").toString().regionMatches(false, 6, "b", 0, 1)) { //$NON-NLS-1$ //$NON-NLS-2$
 						final int btnNummer = (Integer) e.widget.getData("nummer"); //$NON-NLS-1$
 						logic.btnMainClick(btnNummer);
 					}
@@ -362,7 +370,7 @@ public class AndroidUnlockPattern extends ViewPart {
 			public void widgetSelected(SelectionEvent e) {
 				btnSave.setEnabled(false);
 				btnCancel.setEnabled(false);
-				patternInput = false;
+				patternInput = inputFinished = false;
 				logic.btnSaveClick();
 
 			}
@@ -378,7 +386,7 @@ public class AndroidUnlockPattern extends ViewPart {
 			public void widgetSelected(SelectionEvent e) {
 				btnCancel.setEnabled(false);
 				btnSave.setEnabled(false);
-				patternInput = false;
+				patternInput = inputFinished = false;
 				logic.btnCancelClick();
 
 			}
