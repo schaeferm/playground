@@ -185,7 +185,7 @@ public class AndroidUnlockPattern extends ViewPart {
 		fdOb.left = new FormAttachment(0, 10);
 		fdOb.top = new FormAttachment(0);
 		optionbox.setLayoutData(fdOb);
-		btnSave = new Button(controlBox, SWT.None);
+		btnSave = new Button(controlBox, SWT.NONE);
 		FormData fd_btnSave = new FormData();
 		fd_btnSave.top = new FormAttachment(optionbox, 6);
 		fd_btnSave.right = new FormAttachment(optionbox, 0, SWT.RIGHT);
@@ -194,6 +194,7 @@ public class AndroidUnlockPattern extends ViewPart {
 		fd_btnSave.width = 80;
 		btnSave.setLayoutData(fd_btnSave);
 		btnSave.setText(Messages.AndroidUnlockPattern_ButtonSaveText);
+		btnSave.setBackground(SWTResourceManager.getColor(SWT.COLOR_WIDGET_BACKGROUND));
 		// btnCheck = new Button(bottombox, SWT.None);
 		btnCancel = new Button(controlBox, SWT.NONE);
 		btnCancel.setEnabled(false);
@@ -329,7 +330,7 @@ public class AndroidUnlockPattern extends ViewPart {
 						// to get here the button needs to be unclicked
 						// (in this case e.widget.getData("icon").toString() is "icons/black.png")
 						// for performance reasons only the 7. char of the string is checked
-						final int btnNummer = (Integer) e.widget.getData("nummer"); //$NON-NLS-1$
+						int btnNummer = (Integer) e.widget.getData("nummer"); //$NON-NLS-1$
 						logic.btnMainClick(btnNummer);
 					}
 				}
@@ -369,6 +370,7 @@ public class AndroidUnlockPattern extends ViewPart {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
 				btnSave.setEnabled(false);
+				btnSave.setBackground(SWTResourceManager.getColor(SWT.COLOR_WIDGET_BACKGROUND));
 				btnCancel.setEnabled(false);
 				patternInput = inputFinished = false;
 				logic.btnSaveClick();
@@ -386,6 +388,7 @@ public class AndroidUnlockPattern extends ViewPart {
 			public void widgetSelected(SelectionEvent e) {
 				btnCancel.setEnabled(false);
 				btnSave.setEnabled(false);
+				btnSave.setBackground(SWTResourceManager.getColor(SWT.COLOR_WIDGET_BACKGROUND));
 				patternInput = inputFinished = false;
 				logic.btnCancelClick();
 
@@ -395,20 +398,7 @@ public class AndroidUnlockPattern extends ViewPart {
 			public void widgetDefaultSelected(SelectionEvent e) {
 			}
 		});
-
-		// btnCheck.addSelectionListener(new SelectionListener() {
-		//
-		// @Override
-		// public void widgetSelected(SelectionEvent e) {
-		// logic.btnCheckClick();
-		// }
-		//
-		// @Override
-		// public void widgetDefaultSelected(SelectionEvent e) {
-		//
-		//
-		// }
-		// });
+		
 		centerbox.addPaintListener(new PaintListener() {
 			@Override
 			public void paintControl(PaintEvent e) {
@@ -422,6 +412,7 @@ public class AndroidUnlockPattern extends ViewPart {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
 				logic.setModus(1);
+				patternInput = inputFinished = false;
 			}
 
 			@Override
@@ -435,6 +426,7 @@ public class AndroidUnlockPattern extends ViewPart {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
 				logic.setModus(2);
+				patternInput = inputFinished = false;
 				setStatusText("", null); //$NON-NLS-1$
 			}
 
@@ -449,6 +441,7 @@ public class AndroidUnlockPattern extends ViewPart {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
 				logic.setModus(3);
+				patternInput = inputFinished = false;
 				setStatusText("", null); //$NON-NLS-1$
 			}
 
@@ -486,13 +479,6 @@ public class AndroidUnlockPattern extends ViewPart {
 		return mb.open();
 	}
 
-	/**
-	 * sets Text into the standard Textfield/Label
-	 */
-//	protected void setText(String string) {
-//		instrText1.setText(string);
-//	}
-
 	public void setBtnSaveText(String text) {
 		btnSave.setText(text);
 	}
@@ -504,13 +490,13 @@ public class AndroidUnlockPattern extends ViewPart {
 		return setPattern;
 	}
 
-	/**
-	 * @param setPattern
-	 *            the setPattern to set
-	 */
-	public void setSetPattern(Button setPattern) {
-		this.setPattern = setPattern;
-	}
+//	/**
+//	 * @param setPattern
+//	 *            the setPattern to set
+//	 */
+//	public void setSetPattern(Button setPattern) {
+//		this.setPattern = setPattern;
+//	}
 
 	/**
 	 * @return the changePattern
@@ -519,13 +505,13 @@ public class AndroidUnlockPattern extends ViewPart {
 		return changePattern;
 	}
 
-	/**
-	 * @param changePattern
-	 *            the changePattern to set
-	 */
-	public void setChangePattern(Button changePattern) {
-		this.changePattern = changePattern;
-	}
+//	/**
+//	 * @param changePattern
+//	 *            the changePattern to set
+//	 */
+//	public void setChangePattern(Button changePattern) {
+//		this.changePattern = changePattern;
+//	}
 
 	/**
 	 * @return the checkPattern
@@ -534,13 +520,13 @@ public class AndroidUnlockPattern extends ViewPart {
 		return checkPattern;
 	}
 
-	/**
-	 * @param checkPattern
-	 *            the checkPattern to set
-	 */
-	public void setCheckPattern(Button checkPattern) {
-		this.checkPattern = checkPattern;
-	}
+//	/**
+//	 * @param checkPattern
+//	 *            the checkPattern to set
+//	 */
+//	public void setCheckPattern(Button checkPattern) {
+//		this.checkPattern = checkPattern;
+//	}
 
 	/**
 	 * @return the cntrBtn
@@ -563,32 +549,12 @@ public class AndroidUnlockPattern extends ViewPart {
 		return btnCancel;
 	}
 
-	//
-	// /**
-	// * @return the btnCheck
-	// */
-	// public Button getBtnCheck() {
-	// return btnCheck;
-	// }
-
-//	protected Label getTextFeld() {
-//		return instrText1;
-//	}
-
 	/**
 	 * @return the centerbox
 	 */
 	public Group getCenterbox() {
 		return centerbox;
 	}
-
-	/**
-	 * @param centerbox
-	 *            the centerbox to set
-	 */
-	// public void setCenterbox(Group centerbox) {
-	// this.centerbox = centerbox;
-	// }
 
 	public void centerResize() {
 		// centerButtons
@@ -630,7 +596,8 @@ public class AndroidUnlockPattern extends ViewPart {
 						| SWT.ICON_WARNING);
 		if (tmp == SWT.YES) {
 			setStatusText("", null); //$NON-NLS-1$
-			patternInput = false;
+			patternInput = inputFinished = false;
+			btnSave.setBackground(SWTResourceManager.getColor(SWT.COLOR_WIDGET_BACKGROUND));
 			logic.reset();
 		}
 	}

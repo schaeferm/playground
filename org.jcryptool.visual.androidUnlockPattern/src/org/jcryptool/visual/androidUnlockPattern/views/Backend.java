@@ -81,13 +81,13 @@ public class Backend {
 		return this.points;
 	}
 
-	/**
-	 * @param points
-	 *            the points to set
-	 */
-	public void setPoints(int[][] points) {
-		this.points = points;
-	}
+//	/**
+//	 * @param points
+//	 *            the points to set
+//	 */
+//	public void setPoints(int[][] points) {
+//		this.points = points;
+//	}
 
 	/**
 	 * adds the number to the array which should be checked.
@@ -110,6 +110,7 @@ public class Backend {
 		if (!isValid()) {
 			setColor(ROT);
 			visual.getBtnSave().setEnabled(false);
+			visual.getBtnSave().setBackground(STANDARD);
 			visual.setStatusText(Messages.Backend_InfoTextInvalid, ApuState.ERROR);
 		} else if (!isGreatEnough()) {
 			setColor(GELB);
@@ -117,6 +118,7 @@ public class Backend {
 		} else {
 			setColor(GRUEN);
 			visual.getBtnSave().setEnabled(true);
+			visual.getBtnSave().setBackground(GRUEN);
 			visual.setStatusText(Messages.Backend_TEXT_VALID, ApuState.INFO);
 		}
 		if (length > 1) {
@@ -130,11 +132,6 @@ public class Backend {
 			}
 		}
 	}
-
-//	public void btnHelpClick() {
-//		// TODO Auto-generated method stub
-//
-//	}
 
 	/**
 	 * Resets all state information! Use with great care.
@@ -159,6 +156,7 @@ public class Backend {
 					isChangeable = true;
 					visual.updateProgress();
 					visual.getBtnSave().setEnabled(false);
+					visual.getBtnSave().setBackground(STANDARD);
 				}
 			} else {
 				setPattern();
@@ -427,6 +425,7 @@ public class Backend {
 		first = true;
 		setColor(STANDARD);
 		visual.getBtnSave().setEnabled(false);
+		visual.getBtnSave().setBackground(STANDARD);
 		
 		switch(modus) {
 			case 1:
