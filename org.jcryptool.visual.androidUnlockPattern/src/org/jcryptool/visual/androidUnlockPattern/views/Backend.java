@@ -15,7 +15,7 @@ import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Label;
 import org.jcryptool.core.logging.utils.LogUtil;
 import org.jcryptool.visual.androidUnlockPattern.AndroidUnlockPatternPlugin;
-import org.jcryptool.visual.androidUnlockPattern.views.AndroidUnlockPattern.ApuState;
+import org.jcryptool.visual.androidUnlockPattern.views.AupView.ApuState;
 
 /**
  * 
@@ -51,15 +51,15 @@ public class Backend {
 	int[][] lines = new int[8][2];
 	int[][] points = new int[8][4];
 
-	private AndroidUnlockPattern visual;
+	private AupView visual;
 
 	/**
 	 * Initialize some variables
 	 * 
-	 * @param androidUnlockPattern
+	 * @param aupView
 	 */
-	public Backend(AndroidUnlockPattern androidUnlockPattern) {
-		visual = androidUnlockPattern;
+	public Backend(AupView aupView) {
+		visual = aupView;
 		for (int i = 0; i < lines.length; i++) {
 			for (int j = 0; j < lines[i].length; j++) {
 				lines[i][j] = 0;
@@ -337,9 +337,10 @@ public class Backend {
 			case 0:
 				isEnd = true;
 				/*
-				 * // Startpunkt==Endpunkt if (i > 0 && order[i - 1] ==
-				 * order[0]) { return false; } // weniger als 4 Punkte else if
-				 * (i < 4) { return false; }
+				 * // Startpunkt==Endpunkt 
+				 * if (i > 0 && order[i - 1] == order[0]) { return false; }
+				 * // weniger als 4 Punkte 
+				 * else if (i < 4) { return false; }
 				 */
 				break;
 			case 1:

@@ -39,7 +39,7 @@ import org.jcryptool.visual.androidUnlockPattern.AndroidUnlockPatternPlugin;
  * @author Stefan Kraus
  * 
  */
-public class AndroidUnlockPattern extends ViewPart {
+public class AupView extends ViewPart {
 
 	public enum ApuState {
 		ERROR, WARNING, INFO, OK
@@ -72,11 +72,25 @@ public class AndroidUnlockPattern extends ViewPart {
 	private Composite parent;
 	private Boolean patternInput = false;
 	private Boolean inputFinished = false;
+	
+	//precomputed values for APU permutations depending on the APU's length
+	private static int[] apuPerm = {
+//		0,	//lenght 0
+//		0,	//lenght 1
+//		0,	//lenght 2
+//		0,	//lenght 3
+		1624,	//lenght 4
+		8776,	//lenght 5 (4+5)
+		34792,	//lenght 6 (4+5+6)
+		107704,	//lenght 7 (4+5+6+7)
+		248408,	//lenght 8 (4+5+6+7+8)
+		389112	//lenght 9 (4+5+6+7+8+9)
+		};
 
 	/**
 	 * The constructor.
 	 */
-	public AndroidUnlockPattern() {
+	public AupView() {
 		logic = new Backend(this);
 	}
 
