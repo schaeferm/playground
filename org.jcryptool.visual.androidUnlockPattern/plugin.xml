@@ -36,7 +36,7 @@
             locationURI="toolbar:org.jcryptool.visual.androidUnlockPattern.views.AndroidUnlockPattern">
          <command
                commandId="org.jcryptool.visual.androidUnlockPattern.HelpCommand"
-               icon="platform:/plugin/org.eclipse.ui/icons/full/etool16/help_contents.gif"
+               icon="platform:/plugin/org.eclipse.help.ui/icons/view16/help_view.gif"
                style="push"
                tooltip="%command.HelpTooltip">
          </command>

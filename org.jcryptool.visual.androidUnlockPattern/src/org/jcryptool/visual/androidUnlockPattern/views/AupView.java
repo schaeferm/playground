@@ -224,6 +224,9 @@ public class AupView extends ViewPart {
 
 		// center
 		final GridLayout clayout = new GridLayout(3, false);
+		clayout.marginLeft = 10;
+		clayout.marginRight = 10;
+		clayout.marginTop = 10;
 		clayout.horizontalSpacing = 15;
 		clayout.verticalSpacing = 15;
 		centerbox.setLayout(clayout);
@@ -242,7 +245,9 @@ public class AupView extends ViewPart {
 		heading.setLayoutData(fd_heading);
 		heading.setText(Messages.AndroidUnlockPattern_Heading);
 		
-		helpBox.setLayout(new GridLayout(2, true));
+		GridLayout gl_helpBox = new GridLayout(2, true);
+		gl_helpBox.horizontalSpacing = 25;
+		helpBox.setLayout(gl_helpBox);
 		final FormData fd_helpBox = new FormData(180, -1);
 		fd_helpBox.top = new FormAttachment(centerbox, 6);
 		fd_helpBox.bottom = new FormAttachment(100, -10);
@@ -574,10 +579,10 @@ public class AupView extends ViewPart {
 		// centerButtons
 		GridLayout layout = (GridLayout) centerbox.getLayout();
 		int size = Math.min(centerbox.getClientArea().height
-				- layout.marginHeight * 2 - layout.horizontalSpacing * 3
+				- layout.marginHeight * 2 - layout.horizontalSpacing * 3 - layout.marginTop
 				- statusText.getClientArea().height,
 				centerbox.getClientArea().width - layout.marginWidth * 2
-						- layout.verticalSpacing * 2);
+						- layout.verticalSpacing * 2 - layout.marginLeft - layout.marginRight);
 		if (size < 0)
 			return; // Layout not yet initialized
 		size = size / 3; // 3x3 centrcalBtns
