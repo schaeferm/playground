@@ -45,6 +45,9 @@ public class Messages extends NLS {
 	public static String AndroidUnlockPattern_btnCancel_toolTipText;
 	public static String AndroidUnlockPattern_centerbox_text;
 	public static String Backend_InfoTextInvalid;
+	public static String AndroidUnlockPattern_helpBox_instrText_Heading;
+	public static String AndroidUnlockPattern_helpBox_descText_Heading;
+	public static String AndroidUnlockPattern_helpBox_descText_Security;
 	
 	static {
 		// initialize resource bundle

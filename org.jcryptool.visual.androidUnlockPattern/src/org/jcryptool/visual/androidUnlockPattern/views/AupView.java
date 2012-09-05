@@ -68,6 +68,8 @@ public class AupView extends ViewPart {
 	private Label instrText2;
 	private Label instrText3;
 	private CLabel statusText;
+	private Label instrTextHeading;
+	private Label descTextHeading;
 	// private Canvas canv;
 	private Composite parent;
 	private Boolean patternInput = false;
@@ -254,13 +256,19 @@ public class AupView extends ViewPart {
 		fd_helpBox.left = new FormAttachment(0, 10);
 		fd_helpBox.right = new FormAttachment(100, -10);
 		helpBox.setLayoutData(fd_helpBox);
+		
+		instrTextHeading = new Label(helpBox, SWT.READ_ONLY | SWT.WRAP);
+		instrTextHeading.setText(Messages.AndroidUnlockPattern_helpBox_instrText_Heading);
+		
+		descTextHeading = new Label(helpBox, SWT.READ_ONLY | SWT.WRAP);
+		descTextHeading.setText(Messages.AndroidUnlockPattern_helpBox_descText_Heading);
 
 		instrText1 = new Label(helpBox, SWT.READ_ONLY | SWT.WRAP);
 		instrText1.setLayoutData(new GridData(SWT.LEFT, SWT.CENTER, true, false, 1, 1));
 		instrText1.setAlignment(SWT.LEFT);
 		instrText1.setText(Messages.Mode_Set_1);
 		
-		descText = new Label(helpBox, SWT.WRAP);
+		descText = new Label(helpBox, SWT.READ_ONLY | SWT.WRAP);
 		descText.setLayoutData(new GridData(SWT.LEFT, SWT.TOP, true, false, 1, 3));
 		descText.setText(Messages.AndroidUnlockPattern_HelpTextInit);
 		
@@ -392,8 +400,16 @@ public class AupView extends ViewPart {
 				btnSave.setBackground(SWTResourceManager.getColor(SWT.COLOR_WIDGET_BACKGROUND));
 				btnCancel.setEnabled(false);
 				patternInput = inputFinished = false;
+				if(logic.isChangeable()) {
+					int length = 0;
+					for(Label a : cntrBtn) {
+						if(a.getData("icon").toString().regionMatches(false, 6, "g", 0, 1))
+							length++;
+					}
+					descText.setText(String.format(Messages.AndroidUnlockPattern_helpBox_descText_Security, Messages.AndroidUnlockPattern_HelpTextInit, length, apuPerm[length-4]));
+					helpBox.layout(true);
+				}
 				logic.btnSaveClick();
-
 			}
 
 			@Override
@@ -617,6 +633,7 @@ public class AupView extends ViewPart {
 			setStatusText("", null); //$NON-NLS-1$
 			patternInput = inputFinished = false;
 			btnSave.setBackground(SWTResourceManager.getColor(SWT.COLOR_WIDGET_BACKGROUND));
+			descText.setText(Messages.AndroidUnlockPattern_HelpTextInit);
 			logic.reset();
 		}
 	}
