@@ -38,17 +38,18 @@ public class Backend {
 	private Color lineColor = Display.getCurrent().getSystemColor(
 			SWT.COLOR_WIDGET_BACKGROUND);
 
-	private boolean isActive[] = new boolean[arrayLengthStd];
+//	private boolean isActive[] = new boolean[arrayLengthStd];
 	private boolean isChangeable = false;
 	private boolean first = true;
 //	private boolean cancelShowed = false;
 	private int modus;// 1=set;2=change;3=check
 	private int length = 0;
+	private int matrixSize = 3;	//size of the matrix; AUP 3x3
 	private int tryCount = 0;
 	private int[] order = new int[arrayLengthStd];
 	private int[] ordersaved;
 	private int[] ordertmp;
-	int[][] lines = new int[8][2];
+//	int[][] lines = new int[8][2];
 	int[][] points = new int[8][4];
 
 	private AupView visual;
@@ -60,12 +61,11 @@ public class Backend {
 	 */
 	public Backend(AupView aupView) {
 		visual = aupView;
-		for (int i = 0; i < lines.length; i++) {
-			for (int j = 0; j < lines[i].length; j++) {
-				lines[i][j] = 0;
-			}
-
-		}
+//		for (int i = 0; i < lines.length; i++) {
+//			for (int j = 0; j < lines[i].length; j++) {
+//				lines[i][j] = 0;
+//			}
+//		}
 		for (int i = 0; i < points.length; i++) {
 			for (int j = 0; j < points[i].length; j++) {
 				points[i][j] = 0;
@@ -98,21 +98,126 @@ public class Backend {
 	public void add(int btnNummer) {
 		if (this.length > 9) {
 			LogUtil.logError("pattern is longer then 9 -> impossible"); //$NON-NLS-1$
+		} else if (length == 0) {
+		//add starting point	
+			order[length] = btnNummer + 1;
+			length++;
 		} else {
-			this.order[this.length] = btnNummer + 1;
+		//add point
+			int px1 = (order[length - 1] - 1) % matrixSize;	//order: numbers from 1 to 9
+			int py1 = (order[length - 1] - 1) / matrixSize; //order: numbers from 1 to 9
+			int px2 = btnNummer % matrixSize; //btnNummer: numbers from 0 to 8
+			int py2 = btnNummer / matrixSize; //btnNummer: numbers from 0 to 8
+			int dx = px2 - px1;
+			int dy = py2 - py1;
+			
+			if(Math.abs(dx) > 1 || Math.abs(dy) > 1){
+			//check for intermediate points 
+				//read in used points
+				boolean used[] = new boolean[matrixSize*matrixSize];
+				for(int i = 0; i < length; i++) {
+					used[order[i]-1] = true;
+				}
+				int steps, intP;
+				if(dx == 0) {
+				//vertical line	
+					steps = Math.abs(dy) + 1; //calculate the number of points on the line
+					dy = (int)Math.signum(dy);
+					for(int i = 0; i < steps; i++){
+					//add all intermediate points
+						intP = ((py1 + i * dy) * matrixSize + px1);
+						if(!used[intP]) { //check if point is already used -> add if not
+							order[length] = intP + 1; //+1 because the buttons are numbered from 1 to 9
+							length++;
+						}
+					}
+				} else if (dy == 0) {
+				//horizontal line
+					steps = Math.abs(dx) + 1; //calculate the number of points on the line
+					dx = (int)Math.signum(dx);
+					for(int i = 0; i < steps; i++){
+					//add all intermediate points
+						intP = (py1 * matrixSize + (px1 + i * dx));
+						if(!used[intP]) { //check if point is already used -> add if not
+							order[length] = intP + 1; //+1 because the buttons are numbered from 1 to 9
+							length++;
+						}
+					}
+				} else {
+					steps = dx;
+					int gcd;
+					while((gcd = gcd(dx, dy)) != 1) {
+					//eliminate all common divisors
+						dx /= gcd;
+						dy /= gcd;
+					}
+					steps = (steps / dx) + 1; //calculate the number of points on the line
+					for(int i = 0; i < steps; i++){
+					//add all intermediate points
+						intP = ((py1 + i * dy) * matrixSize + (px1 + i * dx));
+						if(!used[intP]) { //check if point is already used -> add if not
+							order[length] = intP + 1; //+1 because the buttons are numbered from 1 to 9
+							length++;
+						}
+					}
+				}
+			} else {
+			//no intermediate points; dx == 0, dy == +-1 || dx == +-1 , dy == 0 || dx == dy == 0
+			//add the clicked point	
+				order[length] = btnNummer + 1;
+				length++;
+			}
 		}
-		this.length++;
+//		for(int a : order)
+//			System.out.print(a + " ");
+//		System.out.println();
 	}
+	
+	/**
+	 * Computes the greatest common divisor of a and b.
+	 * <p>
+	 * Enforce that neither a nor b is 0!
+	 * 
+	 * @param a != 0
+	 * @param b != 0
+	 * @return gcd(a, b)
+	 */
+    static int gcd(int a, int b) {
+    	int x = Math.abs(a);
+    	int y = Math.abs(b);
+		while(x != y) {
+		    if (x > y) x = x - y;
+		    else y = y - x;
+		}
+		return x;
+    }
+
+//    /**
+//	 * Computes the least common multiple of a and b.
+//	 * <p>
+//	 * Enforce that neither a nor b is 0!
+//     * 
+//     * @param a
+//     * @param b
+//     * @return lcm
+//     */
+//    static int lcm(int a, int b) {
+////    	if(a == 0 || b == 0)
+////    		return 0;
+////    	else
+//    		return a * (b / gcd(a,b)); // Klammerung vermeidet Überlauf! 
+//    }
 
 	public void btnMainClick(int btnNummer) {
 		add(btnNummer);
 		visual.getBtnCancel().setEnabled(true);
-		if (!isValid()) {
-			setColor(ROT);
-			visual.getBtnSave().setEnabled(false);
-			visual.getBtnSave().setBackground(STANDARD);
-			visual.setStatusText(Messages.Backend_InfoTextInvalid, ApuState.ERROR);
-		} else if (!isGreatEnough()) {
+//		if (!isValid()) {
+//			setColor(ROT);
+//			visual.getBtnSave().setEnabled(false);
+//			visual.getBtnSave().setBackground(STANDARD);
+//			visual.setStatusText(Messages.Backend_InfoTextInvalid, ApuState.ERROR);
+//		} else 
+		if (!isGreatEnough()) {
 			setColor(GELB);
 			visual.setStatusText(Messages.Backend_TEXT_TO_SHORT, ApuState.WARNING);
 		} else {
@@ -122,14 +227,15 @@ public class Backend {
 			visual.setStatusText(Messages.Backend_TEXT_VALID, ApuState.INFO);
 		}
 		if (length > 1) {
-			for (int[] line : lines) {
-				if (line[0] == 0 && line[1] == 0) {
-					line[0] = order[length - 2];
-					line[1] = order[length - 1];
-					visual.getCenterbox().redraw();
-					break; // TODO rethink... is this smart?
-				}
-			}
+//			for (int[] line : lines) {
+//				if (line[0] == 0 && line[1] == 0) {
+//					line[0] = order[length - 2];
+//					line[1] = order[length - 1];
+//					visual.getCenterbox().redraw();
+//					break;
+//				}
+//			}
+			visual.getCenterbox().redraw();
 		}
 	}
 
@@ -178,7 +284,8 @@ public class Backend {
 	 * In case of a <b>not matching confirmation input</b> the input is reseted and an information message is displayed in the status text.
 	 */
 	private void setPattern() {
-		if (isValid() && isGreatEnough()) {
+//		if (isValid() && isGreatEnough()) {
+		if (isGreatEnough()) {
 			if (first) {
 				first = false;
 				ordertmp = new int[arrayLengthStd];
@@ -308,112 +415,113 @@ public class Backend {
 		return true;
 	}
 
-	/**
-	 * check whether the pattern is valid(without checking the length)
-	 * 
-	 * @return
-	 */
-	private boolean isValid() {
-		for (int i = 0; i < isActive.length; i++) {
-			isActive[i] = false;
-		}
-		boolean isEnd = false;
+//	/**
+//	 * @deprecated It is no longer possible to input invalid pattern.
+//	 * check whether the pattern is valid(without checking the length)
+//	 * 
+//	 * @return
+//	 */
+//	private boolean isValid() {
+//		for (int i = 0; i < isActive.length; i++) {
+//			isActive[i] = false;
+//		}
+//
+//		if (order.length != 10) {
+//			try {
+//				throw new Exception("Internal Error: Wrong length of Array"); //$NON-NLS-1$
+//			} catch (Exception e) {
+//				LogUtil.logError(e);
+//			}
+//		}
+//		if (!(order[9] == 0)) {
+//			LogUtil.logError("Internal Error:last cypher != 0"); //$NON-NLS-1$
+//			return false;
+//		}
 
-		if (order.length != 10) {
-			try {
-				throw new Exception("Internal Error: Wrong length of Array"); //$NON-NLS-1$
-			} catch (Exception e) {
-				LogUtil.logError(e);
-			}
-		}
-		if (!(order[9] == 0)) {
-			LogUtil.logError("Internal Error:last cypher != 0"); //$NON-NLS-1$
-			return false;
-		}
-
-		for (int i = 0; i < order.length - 1; i++) {
-
-			switch (order[i]) {
-			case 0:
-				isEnd = true;
-				/*
-				 * // Startpunkt==Endpunkt 
-				 * if (i > 0 && order[i - 1] == order[0]) { return false; }
-				 * // weniger als 4 Punkte 
-				 * else if (i < 4) { return false; }
-				 */
-				break;
-			case 1:
-
-				if (isEnd || isActive[1] || (order[i + 1] == 3 && !isActive[2])
-						|| (order[i + 1] == 7 && !isActive[4])
-						|| (order[i + 1] == 9 && !isActive[5])) {
-					return false;
-				}
-
-				isActive[1] = true;
-				break;
-			case 2:
-				if (isEnd || isActive[2] || (order[i + 1] == 8 && !isActive[5])) {
-					return false;
-				}
-				isActive[2] = true;
-				break;
-			case 3:
-				if (isEnd || isActive[3] || (order[i + 1] == 1 && !isActive[2])
-						|| (order[i + 1] == 7 && !isActive[5])
-						|| (order[i + 1] == 9 && !isActive[6])) {
-					return false;
-				}
-				isActive[3] = true;
-				break;
-			case 4:
-				if (isEnd || isActive[4] || (order[i + 1] == 6 && !isActive[5])) {
-					return false;
-				}
-				isActive[4] = true;
-				break;
-			case 5:
-				if (isEnd || isActive[5]) {
-					return false;
-				}
-				isActive[5] = true;
-				break;
-			case 6:
-				if (isEnd || isActive[6] || (order[i + 1] == 4 && !isActive[5])) {
-					return false;
-				}
-				isActive[6] = true;
-				break;
-			case 7:
-				if (isEnd || isActive[7] || (order[i + 1] == 1 && !isActive[4])
-						|| (order[i + 1] == 3 && !isActive[5])
-						|| (order[i + 1] == 9 && !isActive[8])) {
-					return false;
-				}
-				isActive[7] = true;
-				break;
-			case 8:
-				if (isEnd || isActive[8] || (order[i + 1] == 2 && !isActive[5])) {
-					return false;
-				}
-				isActive[8] = true;
-				break;
-			case 9:
-				if (isEnd || isActive[9] || (order[i + 1] == 1 && !isActive[5])
-						|| (order[i + 1] == 3 && !isActive[6])
-						|| (order[i + 1] == 7 && !isActive[8])) {
-					return false;
-				}
-				isActive[9] = true;
-				break;
-			}
-
-		}
-
-		return true;
-	}
-
+//		boolean isEnd = false;
+//		for (int i = 0; i < order.length - 1; i++) {
+//
+//			switch (order[i]) {
+//			case 0:
+//				isEnd = true;
+//				/*
+//				 * // Startpunkt==Endpunkt 
+//				 * if (i > 0 && order[i - 1] == order[0]) { return false; }
+//				 * // weniger als 4 Punkte 
+//				 * else if (i < 4) { return false; }
+//				 */
+//				break;
+//			case 1:
+//
+//				if (isEnd || isActive[1] || (order[i + 1] == 3 && !isActive[2])
+//						|| (order[i + 1] == 7 && !isActive[4])
+//						|| (order[i + 1] == 9 && !isActive[5])) {
+//					return false;
+//				}
+//
+//				isActive[1] = true;
+//				break;
+//			case 2:
+//				if (isEnd || isActive[2] || (order[i + 1] == 8 && !isActive[5])) {
+//					return false;
+//				}
+//				isActive[2] = true;
+//				break;
+//			case 3:
+//				if (isEnd || isActive[3] || (order[i + 1] == 1 && !isActive[2])
+//						|| (order[i + 1] == 7 && !isActive[5])
+//						|| (order[i + 1] == 9 && !isActive[6])) {
+//					return false;
+//				}
+//				isActive[3] = true;
+//				break;
+//			case 4:
+//				if (isEnd || isActive[4] || (order[i + 1] == 6 && !isActive[5])) {
+//					return false;
+//				}
+//				isActive[4] = true;
+//				break;
+//			case 5:
+//				if (isEnd || isActive[5]) {
+//					return false;
+//				}
+//				isActive[5] = true;
+//				break;
+//			case 6:
+//				if (isEnd || isActive[6] || (order[i + 1] == 4 && !isActive[5])) {
+//					return false;
+//				}
+//				isActive[6] = true;
+//				break;
+//			case 7:
+//				if (isEnd || isActive[7] || (order[i + 1] == 1 && !isActive[4])
+//						|| (order[i + 1] == 3 && !isActive[5])
+//						|| (order[i + 1] == 9 && !isActive[8])) {
+//					return false;
+//				}
+//				isActive[7] = true;
+//				break;
+//			case 8:
+//				if (isEnd || isActive[8] || (order[i + 1] == 2 && !isActive[5])) {
+//					return false;
+//				}
+//				isActive[8] = true;
+//				break;
+//			case 9:
+//				if (isEnd || isActive[9] || (order[i + 1] == 1 && !isActive[5])
+//						|| (order[i + 1] == 3 && !isActive[6])
+//						|| (order[i + 1] == 7 && !isActive[8])) {
+//					return false;
+//				}
+//				isActive[9] = true;
+//				break;
+//			}
+//
+//		}
+//
+//		return true;
+//	}
+	
 	/**
 	 * Resets the GUI and progress information to the initial state of the current mode.
 	 */
@@ -488,10 +596,10 @@ public class Backend {
 		for (Label btn : visual.getCntrBtn()) {
 			btn.setEnabled(true);
 		}
-		for (int[] line : lines) {
-			line[0] = 0;
-			line[1] = 0;
-		}
+//		for (int[] line : lines) {
+//			line[0] = 0;
+//			line[1] = 0;
+//		}
 		recalculateLines();
 		setColor(STANDARD);
 
@@ -606,17 +714,19 @@ public class Backend {
 				points[i][j] = 0;
 			}
 		}
-		for (int i = 0; i < lines.length; i++) {
-			if (lines[i][0] != 0 && lines[i][1] != 0) {
-//				points[i][0] = getCoordinates(lines[i][0])[0];
-//				points[i][1] = getCoordinates(lines[i][0])[1];
-//				points[i][2] = getCoordinates(lines[i][1])[0];
-//				points[i][3] = getCoordinates(lines[i][1])[1];
-				points[i][0] = visual.getCntrBtn()[lines[i][0]-1].getLocation().x + visual.getCntrBtn()[lines[i][0]-1].getSize().x / 2;
-				points[i][1] = visual.getCntrBtn()[lines[i][0]-1].getLocation().y + visual.getCntrBtn()[lines[i][0]-1].getSize().y / 2;
-				points[i][2] = visual.getCntrBtn()[lines[i][1]-1].getLocation().x + visual.getCntrBtn()[lines[i][1]-1].getSize().x / 2;
-				points[i][3] = visual.getCntrBtn()[lines[i][1]-1].getLocation().y + visual.getCntrBtn()[lines[i][1]-1].getSize().y / 2;
-			}
+//		for (int i = 0; i < lines.length; i++) {
+//			if (lines[i][0] != 0 && lines[i][1] != 0) {
+//				points[i][0] = visual.getCntrBtn()[lines[i][0]-1].getLocation().x + visual.getCntrBtn()[lines[i][0]-1].getSize().x / 2;
+//				points[i][1] = visual.getCntrBtn()[lines[i][0]-1].getLocation().y + visual.getCntrBtn()[lines[i][0]-1].getSize().y / 2;
+//				points[i][2] = visual.getCntrBtn()[lines[i][1]-1].getLocation().x + visual.getCntrBtn()[lines[i][1]-1].getSize().x / 2;
+//				points[i][3] = visual.getCntrBtn()[lines[i][1]-1].getLocation().y + visual.getCntrBtn()[lines[i][1]-1].getSize().y / 2;
+//			}
+//		}
+		for (int i = 0; i < length - 1; i++) {
+			points[i][0] = visual.getCntrBtn()[order[i]-1].getLocation().x + visual.getCntrBtn()[order[i]-1].getSize().x / 2;
+			points[i][1] = visual.getCntrBtn()[order[i]-1].getLocation().y + visual.getCntrBtn()[order[i]-1].getSize().y / 2;
+			points[i][2] = visual.getCntrBtn()[order[i+1]-1].getLocation().x + visual.getCntrBtn()[order[i+1]-1].getSize().x / 2;
+			points[i][3] = visual.getCntrBtn()[order[i+1]-1].getLocation().y + visual.getCntrBtn()[order[i+1]-1].getSize().y / 2;
 		}
 	}
 
