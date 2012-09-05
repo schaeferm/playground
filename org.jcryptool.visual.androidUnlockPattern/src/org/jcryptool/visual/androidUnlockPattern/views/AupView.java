@@ -400,7 +400,7 @@ public class AupView extends ViewPart {
 				btnSave.setBackground(SWTResourceManager.getColor(SWT.COLOR_WIDGET_BACKGROUND));
 				btnCancel.setEnabled(false);
 				patternInput = inputFinished = false;
-				if(logic.isChangeable()) {
+				if(logic.isFirst()) {
 					int length = 0;
 					for(Label a : cntrBtn) {
 						if(a.getData("icon").toString().regionMatches(false, 6, "g", 0, 1))
