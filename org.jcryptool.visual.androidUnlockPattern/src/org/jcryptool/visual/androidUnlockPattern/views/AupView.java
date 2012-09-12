@@ -10,10 +10,11 @@ import org.eclipse.swt.events.PaintEvent;
 import org.eclipse.swt.events.PaintListener;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.events.SelectionListener;
+import org.eclipse.swt.graphics.GC;
 import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.graphics.ImageData;
-import org.eclipse.swt.graphics.Point;
 import org.eclipse.swt.graphics.Region;
+import org.eclipse.swt.graphics.Transform;
 import org.eclipse.swt.layout.FormAttachment;
 import org.eclipse.swt.layout.FormData;
 import org.eclipse.swt.layout.FormLayout;
@@ -33,6 +34,7 @@ import org.eclipse.ui.part.ViewPart;
 import org.jcryptool.core.util.fonts.FontService;
 import org.eclipse.wb.swt.SWTResourceManager;
 import org.jcryptool.visual.androidUnlockPattern.AndroidUnlockPatternPlugin;
+import org.eclipse.swt.custom.StyledText;
 
 /**
  * 
@@ -62,7 +64,7 @@ public class AupView extends ViewPart {
 	private Button checkPattern;
 	private Button btnSave;
 	private Button btnCancel;
-	private Label descText;
+	private StyledText descText;
 	private Backend logic;
 	private Label instrText1;
 	private Label instrText2;
@@ -74,6 +76,7 @@ public class AupView extends ViewPart {
 	private Composite parent;
 	private Boolean patternInput = false;
 	private Boolean inputFinished = false;
+	private Boolean advancedGraphic = false;
 	
 	//precomputed values for APU permutations depending on the APU's length
 	private static int[] apuPerm = {
@@ -118,12 +121,13 @@ public class AupView extends ViewPart {
 		// Create the ScrolledComposite to scroll horizontally and vertically
 		final ScrolledComposite sc = new ScrolledComposite(parent, SWT.H_SCROLL
 				| SWT.V_SCROLL);
+		sc.setMinHeight(500);
+		sc.setMinWidth(500);
 		// Create a child composite to hold the controls
 		final Composite child = new Composite(sc, SWT.NONE);
 		child.setLayout(new FormLayout());
 
 		sc.setContent(child);
-		sc.setMinSize(300, 300);
 		sc.setExpandHorizontal(true);
 		sc.setExpandVertical(true);
 
@@ -158,15 +162,24 @@ public class AupView extends ViewPart {
 		changePattern.setText(Messages.AndroidUnlockPattern_ModeChangeText);
 		checkPattern.setText(Messages.AndroidUnlockPattern_ModeCheckText);
 		optionbox.setText(Messages.AndroidUnlockPattern_GroupHeadingModes);
-		sc.setMinSize(new Point(500, 500));
 
 		initLayout();
 		addActions();
 		centerResize();
-
+		
 		logic.init();
 		child.pack();	//update the size of the visuals child's
 //		child.layout(true);
+		
+		//test if advanced graphic processing is available
+		Image img = AndroidUnlockPatternPlugin.getImageDescriptor("icons/view.gif").createImage(child.getDisplay());
+		GC gc = new GC(img);
+		gc.setAdvanced(true);	// will do nothing if advanced graphic processing is not available
+		if (gc.getAdvanced()){
+			advancedGraphic = true;
+		}
+		gc.dispose();
+		img.dispose();
 	}
 
 	/**
@@ -268,8 +281,10 @@ public class AupView extends ViewPart {
 		instrText1.setAlignment(SWT.LEFT);
 		instrText1.setText(Messages.Mode_Set_1);
 		
-		descText = new Label(helpBox, SWT.READ_ONLY | SWT.WRAP);
-		descText.setLayoutData(new GridData(SWT.LEFT, SWT.TOP, true, false, 1, 3));
+		descText = new StyledText(helpBox, SWT.READ_ONLY | SWT.WRAP | SWT.V_SCROLL);
+		descText.setBackground(Display.getCurrent().getSystemColor(SWT.COLOR_WIDGET_BACKGROUND));
+		descText.setDoubleClickEnabled(false);
+		descText.setLayoutData(new GridData(SWT.LEFT, SWT.TOP, true, true, 1, 3));
 		descText.setText(Messages.AndroidUnlockPattern_HelpTextInit);
 		
 		instrText2 = new Label(helpBox, SWT.READ_ONLY | SWT.WRAP);
@@ -460,6 +475,10 @@ public class AupView extends ViewPart {
 
 			@Override
 			public void widgetSelected(SelectionEvent e) {
+//				if(logic.isChangeable())
+//					setStatusText(Messages.Backend_PopupCancelMessage, ApuState.WARNING); //$NON-NLS-1$
+//				else
+//					setStatusText("", null); //$NON-NLS-1$
 				logic.setModus(2);
 				patternInput = inputFinished = false;
 				setStatusText("", null); //$NON-NLS-1$
@@ -475,6 +494,10 @@ public class AupView extends ViewPart {
 
 			@Override
 			public void widgetSelected(SelectionEvent e) {
+//				if(logic.isChangeable())
+//					setStatusText(Messages.Backend_PopupCancelMessage, ApuState.WARNING); //$NON-NLS-1$
+//				else
+//					setStatusText("", null); //$NON-NLS-1$
 				logic.setModus(3);
 				patternInput = inputFinished = false;
 				setStatusText("", null); //$NON-NLS-1$
@@ -610,7 +633,34 @@ public class AupView extends ViewPart {
 				ImageData tmp = AndroidUnlockPatternPlugin
 						.getImageDescriptor(tmpStr).getImageData()
 						.scaledTo(size, size);
-				cntrBtn[i].setImage(new Image(cntrBtn[i].getDisplay(), tmp));
+				Image img = new Image(cntrBtn[i].getDisplay(), tmp);
+				GC gc = new GC(img);
+				
+				if(cntrBtn[i].getData("arc") != null && advancedGraphic) {
+					Image arrow = null;
+					if(tmpStr.regionMatches(false, 6, "g", 0, 1))
+						arrow = AndroidUnlockPatternPlugin.getImageDescriptor("icons/ArrowGreen.png").createImage(cntrBtn[i].getDisplay());
+					else if(tmpStr.regionMatches(false, 6, "y", 0, 1))
+						arrow = AndroidUnlockPatternPlugin.getImageDescriptor("icons/ArrowYellow.png").createImage(cntrBtn[i].getDisplay());
+					
+					if(arrow != null) {
+						Transform oldTransform = new Transform(gc.getDevice());
+						gc.getTransform(oldTransform);
+						
+						Transform transform = new Transform(gc.getDevice());
+						transform.translate(size/2, size/2);
+						transform.rotate((Float)cntrBtn[i].getData("arc"));
+						transform.translate(-size/2, -size/2);
+						
+						gc.setTransform(transform);
+						gc.drawImage(arrow, 0, 0, arrow.getImageData().width, arrow.getImageData().height, 0, 0, size, size);
+						gc.setTransform(oldTransform);
+						transform.dispose();
+						arrow.dispose();
+					}
+				}
+				
+				cntrBtn[i].setImage(img);
 			}
 			regionCircle = new Region();
 			regionCircle.add(circle(size / 2, cntrBtn[i].getBounds().width / 2,
@@ -639,6 +689,8 @@ public class AupView extends ViewPart {
 	}
 
 	protected void setStatusText(String message, ApuState state) {
+		if(statusText.getImage() != null)
+			statusText.getImage().dispose();
 		if(state == null) {
 			statusText.setImage(null);
 			statusText.setForeground(SWTResourceManager.getColor(SWT.COLOR_BLACK));
@@ -666,6 +718,10 @@ public class AupView extends ViewPart {
 		}
 		statusText.setText(message);
 		//to avoid control from growing and to automatically lay out do not call pack(true) here
+//		if(state != null)
+//			System.out.println(state.toString() + ": " + message);
+//		else
+//			System.out.println("NoState: " + message);
 	}
 
 	

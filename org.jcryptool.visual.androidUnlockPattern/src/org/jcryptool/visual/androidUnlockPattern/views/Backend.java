@@ -110,6 +110,7 @@ public class Backend {
 			int py2 = btnNummer / matrixSize; //btnNummer: numbers from 0 to 8
 			int dx = px2 - px1;
 			int dy = py2 - py1;
+			float arc = (float)(Math.atan2(dy, dx) * 180 / Math.PI);
 			
 			if(Math.abs(dx) > 1 || Math.abs(dy) > 1){
 			//check for intermediate points 
@@ -127,6 +128,7 @@ public class Backend {
 					//add all intermediate points
 						intP = ((py1 + i * dy) * matrixSize + px1);
 						if(!used[intP]) { //check if point is already used -> add if not
+							visual.getCntrBtn()[order[length-1] - 1].setData("arc", arc);
 							order[length] = intP + 1; //+1 because the buttons are numbered from 1 to 9
 							length++;
 						}
@@ -139,6 +141,7 @@ public class Backend {
 					//add all intermediate points
 						intP = (py1 * matrixSize + (px1 + i * dx));
 						if(!used[intP]) { //check if point is already used -> add if not
+							visual.getCntrBtn()[order[length-1] - 1].setData("arc", arc);
 							order[length] = intP + 1; //+1 because the buttons are numbered from 1 to 9
 							length++;
 						}
@@ -156,6 +159,7 @@ public class Backend {
 					//add all intermediate points
 						intP = ((py1 + i * dy) * matrixSize + (px1 + i * dx));
 						if(!used[intP]) { //check if point is already used -> add if not
+							visual.getCntrBtn()[order[length-1] - 1].setData("arc", arc);
 							order[length] = intP + 1; //+1 because the buttons are numbered from 1 to 9
 							length++;
 						}
@@ -164,6 +168,7 @@ public class Backend {
 			} else {
 			//no intermediate points; dx == 0, dy == +-1 || dx == +-1 , dy == 0 || dx == dy == 0
 			//add the clicked point	
+				visual.getCntrBtn()[order[length-1] - 1].setData("arc", arc);
 				order[length] = btnNummer + 1;
 				length++;
 			}
@@ -527,7 +532,7 @@ public class Backend {
 	 */
 	private void modusChanged() {
 		//cancel current operation
-		btnCancelClick();
+		cancel();
 		
 		//reset progress
 		isChangeable = false;
@@ -581,6 +586,8 @@ public class Backend {
 			}
 		} else {
 			for (Label btn : visual.getCntrBtn()) {
+				if(btn.getImage() != null)
+					btn.getImage().dispose();
 				Image img = AndroidUnlockPatternPlugin
 						.getImageDescriptor("icons/black.png").createImage(btn.getDisplay()); //$NON-NLS-1$
 				btn.setImage(img);
@@ -594,13 +601,14 @@ public class Backend {
 
 	private void resetBtn() {
 		for (Label btn : visual.getCntrBtn()) {
-			btn.setEnabled(true);
+//			btn.setEnabled(true);
+			btn.setData("arc", null);
 		}
 //		for (int[] line : lines) {
 //			line[0] = 0;
 //			line[1] = 0;
 //		}
-		recalculateLines();
+//		recalculateLines();
 		setColor(STANDARD);
 
 	}
