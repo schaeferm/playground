@@ -285,7 +285,7 @@ public class AupView extends ViewPart {
 		descText.setBackground(Display.getCurrent().getSystemColor(SWT.COLOR_WIDGET_BACKGROUND));
 		descText.setDoubleClickEnabled(false);
 		descText.setLayoutData(new GridData(SWT.LEFT, SWT.TOP, true, true, 1, 3));
-		descText.setText(Messages.AndroidUnlockPattern_HelpTextInit);
+		descText.setText(Messages.AndroidUnlockPattern_helpBox_descText);
 		
 		instrText2 = new Label(helpBox, SWT.READ_ONLY | SWT.WRAP);
 		instrText2.setLayoutData(new GridData(SWT.LEFT, SWT.CENTER, true, false, 1, 1));
@@ -421,7 +421,7 @@ public class AupView extends ViewPart {
 						if(a.getData("icon").toString().regionMatches(false, 6, "g", 0, 1))
 							length++;
 					}
-					descText.setText(String.format(Messages.AndroidUnlockPattern_helpBox_descText_Security, Messages.AndroidUnlockPattern_HelpTextInit, length, apuPerm[length-4]));
+					descText.setText(String.format(Messages.AndroidUnlockPattern_helpBox_descText_Security, Messages.AndroidUnlockPattern_helpBox_descText, length, apuPerm[length-4]));
 					helpBox.layout(true);
 				}
 				logic.btnSaveClick();
@@ -683,7 +683,7 @@ public class AupView extends ViewPart {
 			setStatusText("", null); //$NON-NLS-1$
 			patternInput = inputFinished = false;
 			btnSave.setBackground(SWTResourceManager.getColor(SWT.COLOR_WIDGET_BACKGROUND));
-			descText.setText(Messages.AndroidUnlockPattern_HelpTextInit);
+			descText.setText(Messages.AndroidUnlockPattern_helpBox_descText);
 			logic.reset();
 		}
 	}
