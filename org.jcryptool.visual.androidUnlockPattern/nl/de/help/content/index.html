@@ -5,26 +5,26 @@
 	</head>
 	<body>
 		<h1>Grafische Passwörter</h1>
-		<p>Das im JCrypTool implementierte grafische Passwortverfahren ist der Android-Mustersperre (vom englischen Android Unlock Pattern, AUP) nachempfunden, mit dem sich bei Android-Smartphones die Bildschirmsperre aufheben lässt. Dieses Verfahren wird im Folgenden genauer vorgestellt und die Sicherheit im Vergleich zur PIN-Eingabe analysiert. Anschließend werden einige weitere Methoden zur Erzeugung grafischer Passwörter vorgestellt.</p>
+		<p>Das im JCrypTool implementierte grafische Passwortverfahren ist der Android-Mustersperre (vom englischen Android Unlock Pattern, AUP) nachempfunden, mit dem sich bei Android-Geräten die Bildschirmsperre aufheben lässt. Dieses Verfahren wird im Folgenden genauer vorgestellt und die Sicherheit im Vergleich zur PIN-Eingabe analysiert. Anschließend werden einige weitere Methoden zur Erzeugung grafischer Passwörter vorgestellt.</p>
 		
 		<h2>Android-Mustersperre (AUP)</h2>
-		<p>Dieses Authentifizierungsverfahren wird beim Android-Betriebssystem seit Oktober 2008 in der Version 1.0 als Entsperrmechanismus angeboten. Ziel dieser Methode ist es Unbefugten den Zugriff auf Daten des Telefons zu verweigern. Im Folgenden wird ein kurzer Einblick in die Vorschriften zur Passworterstellung und die Sicherheit des AUP gegeben.</p>
+		<p>Dieses Authentifizierungsverfahren wird beim Android-Betriebssystem seit Oktober 2008 in der Version 1.0 als Entsperrmechanismus angeboten. Ziel dieser Methode ist es Unbefugten den Zugriff auf Daten des Telefons zu verweigern. Im Folgenden wird ein kurzer Einblick in Aufbau und Sicherheit des AUP gegeben.</p>
 		
 		<p align=center><img src="pattern_valid.png"></p>
 		
-		<h3>Passworterstellung</h3>
+		<h3>AUP Aufbau</h3>
 		<p>Des AUP besteht aus neun quadratisch angeordneten Feldern, deren Verbindungen als Passwort angesehen werden können. Das durch die Eingabe entstandene Muster wird dann zum Entsperren verwendet.</p>
-		<p>Bei der AUP Passwortwahl müssen die folgenden Regeln beachtet werden:</p>
+		<p>Bei der AUP Musterauswahl müssen die folgenden Regeln beachtet werden:</p>
 		<ul>
-			<li>Das Passwort muss aus mindestens vier der neun möglichen Felder bestehen.</li>
+			<li>Das Muster muss aus mindestens vier der neun möglichen Felder bestehen.</li>
 			<li>Jedes Feld darf nur einmal benutzt werden.</li>
-			<li>Verbindungen zwischen zwei Feldern, deren Verbindungsline ein ungenutztes Feld schneidet, sind unzulässig.</li>
+			<li>Verbindungen zwischen zwei Feldern, deren Verbindungslinie ein ungenutztes Feld schneidet, sind unzulässig.</li>
 			<li>Die Reihenfolge der besuchten Felder ist entscheidend.</li>
 		</ul>		
 		
-		<h3>Sicherheit</h3>
-		<p>Da auf vielen Smartphones ein vom Hersteller modifiziertes Android läuft, wird das Google Nexus S mit nicht-modifiziertem Android 2.3.4 als Referenzplattform verwendet. Nach fünfmaliger Falscheingabe des grafischen Passwortes muss der Benutzer 30 Sekunden warten. Zusätzlich besteht die Möglichkeit das Smartphone mithilfe des zugehörigen Google-Passwortes zu entsperren. Der Benutzer hat aber auch noch weitere 15 Versuche um das Muster einzugeben. Nach jeweils fünf Fehlversuchen muss 30 Sekunden gewartet werden. Nach insgesamt 20 Fehlversuchen kann nur noch das Google-Passwort zum Entsperren genutzt werden. Die Sicherheit dieses Passworts wird nicht näher betrachtet, da es sich dabei um ein textuelles Passwort handelt.</p>
-		<p>Durch die Regeln für die Passworterstellung ergeben sich insgesamt 389.112 mögliche Muster. Dieser Wert wurde mittels eines Brute-Force Programms ermittelt.</p>
+		<h3>AUP Sicherheit</h3>
+		<p>Da auf vielen Smartphones ein vom Hersteller modifiziertes Android läuft, wird das Google Nexus S mit nicht-modifiziertem Android 2.3.4 als Referenzplattform verwendet. Nach fünfmaliger Falscheingabe des grafischen Passwortes muss der Benutzer 30 Sekunden warten. Zusätzlich besteht dann die Möglichkeit das Smartphone mithilfe des zugehörigen Google-Passwortes zu entsperren. Der Benutzer hat aber auch noch weitere 15 Versuche um das Muster einzugeben. Nach jeweils fünf Fehlversuchen muss 30 Sekunden gewartet werden. Nach insgesamt 20 Fehlversuchen kann nur noch das Google-Passwort zum Entsperren genutzt werden. Die Sicherheit dieses Passworts wird nicht näher betrachtet, da es sich dabei um ein textuelles Passwort handelt.</p>
+		<p>Durch die Regeln für die Passworterstellung ergeben sich insgesamt 389.112 mögliche Muster für das AUP. Dieser Wert wurde mittels eines Brute-Force Programms ermittelt.</p>
 		<p>Zum Vergleich: Bei einer 4 bis 9 stelligen PIN, die aus Ziffern von 1 bis 9 gebildet werden kann und bei der jede Ziffer nur einmal vorkommen darf, gibt es 985.824 verschieden Möglichkeiten. Dies lässt sich durch folgende Formel berechnen:</p>
 		
 		<p><img src="formula_pin_perm.png"></p>
@@ -51,14 +51,14 @@
 			</tr>
 		</table></p>-->
 		
-		<p>Die folgende Tabelle illustriert die Anzahl der Möglichkeiten des AUP im direkten Vergleich zu der oben definiereten, eingeschränkten PIN. Die Spalte "Faktor" beschreibt wie viel mehr Muster sich ergeben, wenn die Länge um 1 erhöht wird. Die Spalte "AUP/PIN" gibt den Quotienten zwischen der Anzahl der APU und PIN Variationen an.</p>
+		<p>Die folgende Tabelle illustriert die Anzahl der Möglichkeiten des AUP im direkten Vergleich zu der oben definierten, eingeschränkten PIN. Die Spalte "Faktor" beschreibt wie viel mehr Muster sich ergeben, wenn die Länge um 1 erhöht wird. Die Spalte "AUP/PIN" gibt den Quotienten zwischen der Anzahl der APU und PIN Variationen an.</p>
 		
-		<p><table border=1>
+		<p><table border=1 align=center>
 			<tr>
 				<td> </td>
 				<td colspan=2>PIN</td>
 				<td colspan=2>AUP</td>
-				<td></td>
+				<td>AUP/PIN</td>
 			</tr>
 			<tr>
 				<td>Stellen</td>
@@ -66,7 +66,7 @@
 				<td>Faktor</td>
 				<td>Anzahl</td>
 				<td>Faktor</td>
-				<td>AUP/PIN</td>
+				<td></td>
 			</tr>
 			<tr>
 				<td>4</td>
@@ -126,7 +126,7 @@
 			</tr>
 		</table></p>
 		
-		<p>Wie der Tabelle entnommen werden kann hat die AUP ein kleineres Wachstum. Dadurch schneidet es im Direktvergleich zur PIN mit zunehmender Länge immer schlechter ab. In der Summe über alle möglichen Muster kann das AUP nur etwa 40% der Variationen der PIN erzielen. Das AUP ist folglich im Direktvergleich zur eingeschränkten PIN, bei gleichen Längen, deutlich schwächer. Es sollte aber bedacht werden, dass sich Menschen Muster bzw. Bilder nachweisbar besser merken können <sup><a id="anker1" title="Zur Quelle" href="#fn1">[1]</a></sup>. Folglich lassen sich auch längere Muster gut merken, weshalb nicht davon ausgegangen werden kann, dass der Direktvergleich einen hohen Aussagenwert besitzt. Auch bedacht werden sollte, dass eine "normale" PIN deutlich mehr Möglichkeiten besitzt. Die Anzahl der Variationen einer PIN mit 10 Ziffern der Länge <i>l</i> beträgt 10<sup><i>l</i></sup>. Das Ergebnis eines Vergleichs der Gesamtanzahl aller 4-9 stelligen PINs mit der Gesamtheit aller AUP Muster ergibt, dass es etwa 2856 so viele PIN Variationen wie AUP Variationen gibt. Dadurch, dass es beim AUP weniger Möglichkeiten bei der Passwortwahl gibt, ist es gegen einen Brute-Force-Angriff anfälliger als PIN- oder Passwort-Authentifizierungsverfahren. In der Praxis ist ein Brute-Force-Angriff, über die reguläre Eingabe, nicht möglich, da nach spätestens 20 Versuchen das Email-Passwort benötigt wird.</p>
+		<p>Wie der Tabelle entnommen werden kann hat die AUP ein kleineres Wachstum. Dadurch schneidet es im Direktvergleich zur PIN mit zunehmender Länge immer schlechter ab. In der Summe über alle möglichen Muster kann das AUP nur etwa 40% der Variationen der PIN erzielen. Es sollte aber bedacht werden, dass sich Menschen Muster bzw. Bilder nachweisbar besser merken können <sup><a id="anker1" title="Zur Quelle" href="#fn1">[1]</a></sup>. Folglich lassen sich auch längere Muster gut merken, weshalb nicht davon ausgegangen werden kann, dass der Direktvergleich einen hohen Aussagewert besitzt. Auch bedacht werden sollte, dass eine "normale" PIN deutlich mehr Möglichkeiten besitzt. Die Anzahl der Variationen einer PIN mit 10 Ziffern der Länge <i>l</i> beträgt 10<sup><i>l</i></sup>. Das Ergebnis eines Vergleichs der Gesamtanzahl aller 4-9 stelligen PINs mit der Gesamtheit aller AUP Muster ergibt, dass es etwa 2.856 so viele PIN Variationen wie AUP Variationen gibt. Dadurch, dass es beim AUP weniger Möglichkeiten bei der Passwortwahl gibt, ist es gegen einen Brute-Force-Angriff anfälliger als PIN- oder Passwort-Authentifizierungsverfahren. In der Praxis ist ein Brute-Force-Angriff, über die reguläre Eingabe, nicht möglich, da nach spätestens 20 Versuchen das Email-Passwort benötigt wird.</p>
 		
 		<h4>Angriffe</h4>
 		<p>Shoulder Surfing</p>
@@ -135,7 +135,7 @@
 		<p>Smudge Angriff</p>
 		<p>Bei der Nutzung von Geräten mit Touchscreen bleiben meist ölige Rückstände auf der Oberfläche zurück. Diese können als Seitenkanal für einen Angriff, den Smudge Angriff, verwendet werden um kürzlich oder häufig berührte Bereiche des Bildschirms zu bestimmen. Die resultierenden Informationen können dann beispielsweise verwendet werden um Informationen über das Authentifizierungsmuster oder -passwort zu erhalten.</p>
 		
-		<p>Angriff auf die gespeicherten Daten</p>
+		<p>Angriff auf entwendete Daten</p>
 		<p>Gelingt es Authentifizierungsdaten auszulesen und somit vom authentifizierenden System zu trennen, so können diese direkt untersucht werden. Es ist dann beispielsweise möglich einen Brute-Force-Angriff, der alle Möglichkeiten durchprobiert bis die berechneten Daten mit den entwendeten Daten übereinstimmen, auszuführen. Problematisch im Zusammenhang mit Android ist, dass die Muster für ihre Speicherung lediglich ungesalzen gehasht<sup><a id="anker2" title="Zur Quelle" href="#fn2">[2]</a></sup> werden. Dies ermöglicht sogar einen noch mächtigeren Wörterbuchangriff auf die gespeicherten Muster. Kennt der Angreifer den Hashwert, so kann er mit diesem Angriff in Sekundenschnelle sagen welches Muster verwendet wurde.</p>
 		
 		<h2>Andere Arten grafische Passwörter</h2>
@@ -150,7 +150,7 @@
 			<tr>
 				<td align=center>Nutzereingabe</td>
 				<td></td>
-				<td align=center>Interne Represtentation</td>
+				<td align=center>Interne Repräsentation</td>
 			</tr>
 		</table></p>
 		<p>Das DAS ist eine Art der Nutzerauthentifizierung, bei der "Passwörter" gezeichnet werden. Diese werden als Abfolge von berührten Feldern in einem Raster gespeichert. Beim DAS gibt es keine Einschränkungen in Bezug auf die Länge oder Wiederholung von Feldern. Darüber hinaus kann ein Muster aus mehreren nicht zusammenhängenden Teilen bestehen. Das AUP unterliegt im Gegensatz zum DAS den oben aufgeführten Einschränkungen und ist demzufolge ein Spezialfall. Die Entwickler des DAS empfehlen eine Rastergröße von fünf mal fünf<sup><a id="anker3" title="Zur Quelle" href="#fn3">[3]</a></sup>.</p>
@@ -184,13 +184,13 @@
 		<p align=center><img src="PicturePassword.png"></p>
 		<p>Windows 8 greift die Idee der grafischen Passwörter auf und bietet sie als Login-Möglichkeit an <sup><a id="anker5" title="Zur Quelle" href="#fn5">[5]</a></sup>. Der Nutzer kann sich für diesen Mechanismus ein Bild auswählen und im Anschluss Bereiche darauf mit verschiedenen Gesten hervorheben. Im Gegensatz zum DAS sind keine freien Gesten möglich. Die Gesten sind auf Kreise, Linien und Punkte limitiert. Ein weiterer Unterschied ist auch, dass lediglich nur verschiedene Charakteristiken für die Authentisierung gespeichert werden und nicht die berührten Felder. Bei Linien sind dies der Anfangs- und Endpunkt, sowie ihre Richtung. Darüber hinaus ist das Raster beim Picture Passwort deutlich feiner. So wird die längere Seite des Bildes in 100 Abschnitte unterteilt. Diese Skalierung wird anschließend auf die kürzere Seite übertragen um das Raster zu bilden, welches über das Bild gelegt wird. Wie von Microsoft angegeben bietet auch dieses Verfahren eine deutlich größere Sicherheit als traditionelle Passwörter.</p>
 		<hr>
-		<p>Fußnoten</p>
+		<p>Quellen</p>
 		<ol>
 			<!--<li id="fn1"><a href="#anker1" title="Zur Textstelle">[1]</a> http://android.git.kernel.org/?p=platform/frameworks/policies/base.git;a=tree;f=phone/com/android/internal/policy/impl;h=8d90808fbe9bca01c6c49659969ce7074f0b1f0a;hb=58096b60fc111564c663d685d3b147ea4a5f3832</li>-->
 			<li id="fn1"><a href="#anker1" title="Zur Textstelle">[1]</a> "The Draw-a-Secret (DAS) Scheme", http://static.usenix.org/events/sec99/full_papers/jermyn/jermyn_html/node4.html</li>
 			<li id="fn2"><a href="#anker2" title="Zur Textstelle">[2]</a> "Cracking the Pattern Lock on Android", http://forensics.spreitzenbarth.de/2012/02/28/cracking-the-pattern-lock-on-android/</li>
 			<li id="fn3"><a href="#anker3" title="Zur Textstelle">[3]</a> I. Jermyn, A. Mayer, F. Monrose, M. K. Reiter und A. D. Rubin, "The Design and Analysis of Graphical Passwords" in Proceedings of the 8th USENIX Security Symposium, 1999.</li>
-			<li id="fn4"><a href="#anker4" title="Zur Textstelle">[4]</a> Xiaoyuan Suo, Ying Zhu, G. Scott. Owen: "Graphical Passwords: A Survey"</li>
+			<li id="fn4"><a href="#anker4" title="Zur Textstelle">[4]</a> Xiaoyuan Suo, Ying Zhu und G. Scott. Owen: "Graphical Passwords: A Survey"</li>
 			<li id="fn5"><a href="#anker5" title="Zur Textstelle">[5]</a> Steven Sinofsky, Microsoft Corporation: "Signing in with a picture password", http://blogs.msdn.com/b/b8/archive/2011/12/16/signing-in-with-a-picture-password.aspx</li>
 		</ol>
 	</body>
