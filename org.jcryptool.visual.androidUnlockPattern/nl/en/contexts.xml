@@ -2,6 +2,6 @@
 <contexts>
    <context id="ContextHelpView" title="Android Unlock Pattern">
       <description>The Android Unlock Pattern plug-in is adopted from Androids unlock pattern. These smartphones can be secured using this method.</description>
-      <topic href="nl/en/help/content/index.html" label="Android Unlock Pattern"/>
+      <topic href="$nl$/help/content/index.html" label="Android Unlock Pattern"/>
    </context>
 </contexts>
