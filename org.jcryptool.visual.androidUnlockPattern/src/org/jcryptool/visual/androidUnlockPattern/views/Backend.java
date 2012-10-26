@@ -559,12 +559,14 @@ public class Backend {
 			for (int i = 0; i < order.length; i++) {
 				if (order[i] != 0) {
 					if (farbe == GELB) {
+						if(visual.getCntrBtn()[order[i] - 1].getImage() != null) visual.getCntrBtn()[order[i] - 1].getImage().dispose(); //dispose old image
 						Image img = AndroidUnlockPatternPlugin
 								.getImageDescriptor("icons/yellow.png").createImage(visual.getCntrBtn()[i].getDisplay()); //$NON-NLS-1$
 						visual.getCntrBtn()[order[i] - 1].setImage(img);
 						visual.getCntrBtn()[order[i] - 1].setData(
 								"icon", "icons/yellow.png"); //$NON-NLS-1$ //$NON-NLS-2$
 					} else if (farbe == ROT) {
+						if(visual.getCntrBtn()[order[i] - 1].getImage() != null) visual.getCntrBtn()[order[i] - 1].getImage().dispose(); //dispose old image
 						Image img = AndroidUnlockPatternPlugin
 								.getImageDescriptor("icons/red.png").createImage(visual.getCntrBtn()[i].getDisplay()); //$NON-NLS-1$
 						visual.getCntrBtn()[order[i] - 1].setImage(img);
@@ -572,6 +574,7 @@ public class Backend {
 								"icon", "icons/red.png"); //$NON-NLS-1$ //$NON-NLS-2$
 
 					} else if (farbe == GRUEN) {
+						if(visual.getCntrBtn()[order[i] - 1].getImage() != null) visual.getCntrBtn()[order[i] - 1].getImage().dispose(); //dispose old image
 						Image img = AndroidUnlockPatternPlugin
 								.getImageDescriptor("icons/green.png").createImage(visual.getCntrBtn()[i].getDisplay()); //$NON-NLS-1$
 						visual.getCntrBtn()[order[i] - 1].setImage(img);

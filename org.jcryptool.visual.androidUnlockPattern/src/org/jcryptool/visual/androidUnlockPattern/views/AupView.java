@@ -3,6 +3,9 @@ package org.jcryptool.visual.androidUnlockPattern.views;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.CLabel;
 import org.eclipse.swt.custom.ScrolledComposite;
+import org.eclipse.swt.custom.StyledText;
+import org.eclipse.swt.events.DisposeEvent;
+import org.eclipse.swt.events.DisposeListener;
 import org.eclipse.swt.events.MouseEvent;
 import org.eclipse.swt.events.MouseListener;
 import org.eclipse.swt.events.MouseTrackListener;
@@ -10,6 +13,7 @@ import org.eclipse.swt.events.PaintEvent;
 import org.eclipse.swt.events.PaintListener;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.events.SelectionListener;
+import org.eclipse.swt.graphics.Font;
 import org.eclipse.swt.graphics.GC;
 import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.graphics.ImageData;
@@ -30,11 +34,9 @@ import org.eclipse.swt.widgets.Listener;
 import org.eclipse.swt.widgets.MessageBox;
 import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.part.ViewPart;
-
-import org.jcryptool.core.util.fonts.FontService;
 import org.eclipse.wb.swt.SWTResourceManager;
+import org.jcryptool.core.util.fonts.FontService;
 import org.jcryptool.visual.androidUnlockPattern.AndroidUnlockPatternPlugin;
-import org.eclipse.swt.custom.StyledText;
 
 /**
  * 
@@ -254,6 +256,13 @@ public class AupView extends ViewPart {
 
 		Label heading = new Label(headingBox, SWT.NONE);
 		heading.setFont(FontService.getHeaderFont());
+		heading.addDisposeListener(new DisposeListener() {
+			
+			@Override
+			public void widgetDisposed(DisposeEvent e) {
+				((Label)e.widget).getFont().dispose();
+			}
+		});
 		FormData fd_heading = new FormData();
 		fd_heading.top = new FormAttachment(0, 10);
 		fd_heading.left = new FormAttachment(0, 10);
@@ -277,7 +286,7 @@ public class AupView extends ViewPart {
 		descTextHeading.setText(Messages.AndroidUnlockPattern_helpBox_descText_Heading);
 
 		instrText1 = new Label(helpBox, SWT.READ_ONLY | SWT.WRAP);
-		instrText1.setLayoutData(new GridData(SWT.LEFT, SWT.CENTER, true, false, 1, 1));
+		instrText1.setLayoutData(new GridData(SWT.LEFT, SWT.TOP, true, false, 1, 1));
 		instrText1.setAlignment(SWT.LEFT);
 		instrText1.setText(Messages.Mode_Set_1);
 		
@@ -288,12 +297,12 @@ public class AupView extends ViewPart {
 		descText.setText(Messages.AndroidUnlockPattern_helpBox_descText);
 		
 		instrText2 = new Label(helpBox, SWT.READ_ONLY | SWT.WRAP);
-		instrText2.setLayoutData(new GridData(SWT.LEFT, SWT.CENTER, true, false, 1, 1));
+		instrText2.setLayoutData(new GridData(SWT.LEFT, SWT.TOP, true, false, 1, 1));
 		instrText2.setAlignment(SWT.LEFT);
 		instrText2.setText(Messages.Mode_Set_1);
 		
 		instrText3 = new Label(helpBox, SWT.READ_ONLY | SWT.WRAP);
-		instrText3.setLayoutData(new GridData(SWT.LEFT, SWT.CENTER, true, false, 1, 1));
+		instrText3.setLayoutData(new GridData(SWT.LEFT, SWT.TOP, true, false, 1, 1));
 		instrText3.setAlignment(SWT.LEFT);
 		instrText3.setText(Messages.Mode_Set_1);
 
@@ -405,6 +414,13 @@ public class AupView extends ViewPart {
 //						System.out.println("right down");
 				}
 			});
+			cntrBtn[i].addDisposeListener(new DisposeListener() {
+				
+				@Override
+				public void widgetDisposed(DisposeEvent e) {
+					if(((Label)e.widget).getImage() != null) ((Label)e.widget).getImage().dispose(); //dispose image
+				}
+			});
 		}
 		
 		btnSave.addSelectionListener(new SelectionListener() {
@@ -509,7 +525,6 @@ public class AupView extends ViewPart {
 			}
 
 		});
-
 	}
 
 	protected void drawLines(PaintEvent e) {
@@ -655,6 +670,7 @@ public class AupView extends ViewPart {
 						gc.setTransform(transform);
 						gc.drawImage(arrow, 0, 0, arrow.getImageData().width, arrow.getImageData().height, 0, 0, size, size);
 						gc.setTransform(oldTransform);
+						oldTransform.dispose();
 						transform.dispose();
 						arrow.dispose();
 					}
@@ -669,6 +685,7 @@ public class AupView extends ViewPart {
 			cntrBtn[i].setRegion(regionCircle);
 //			cntrBtn[i].setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true));
 			cntrBtn[i].setLayoutData(new GridData(size, size));
+			regionCircle.dispose();
 		}
 	}
 
