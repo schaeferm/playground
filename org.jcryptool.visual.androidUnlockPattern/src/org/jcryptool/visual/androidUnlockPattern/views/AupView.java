@@ -173,6 +173,19 @@ public class AupView extends ViewPart {
 		child.pack();	//update the size of the visuals child's
 //		child.layout(true);
 		
+		//dispose allocated resources on shutdown
+		parent.addDisposeListener(new DisposeListener() {
+			
+			@Override
+			public void widgetDisposed(DisposeEvent e) {
+				for(Label l:cntrBtn)
+				{
+					if(l.getImage() != null) l.getImage().dispose(); //dispose image
+				}
+				headingBox.getChildren()[0].getFont().dispose();
+			}
+		});
+		
 		//test if advanced graphic processing is available
 		Image img = AndroidUnlockPatternPlugin.getImageDescriptor("icons/view.gif").createImage(child.getDisplay());
 		GC gc = new GC(img);
@@ -256,13 +269,6 @@ public class AupView extends ViewPart {
 
 		Label heading = new Label(headingBox, SWT.NONE);
 		heading.setFont(FontService.getHeaderFont());
-		heading.addDisposeListener(new DisposeListener() {
-			
-			@Override
-			public void widgetDisposed(DisposeEvent e) {
-				((Label)e.widget).getFont().dispose();
-			}
-		});
 		FormData fd_heading = new FormData();
 		fd_heading.top = new FormAttachment(0, 10);
 		fd_heading.left = new FormAttachment(0, 10);
@@ -412,13 +418,6 @@ public class AupView extends ViewPart {
 //						System.out.println("left down");
 //					if((e.stateMask & SWT.BUTTON2) != 0)	//1048576
 //						System.out.println("right down");
-				}
-			});
-			cntrBtn[i].addDisposeListener(new DisposeListener() {
-				
-				@Override
-				public void widgetDisposed(DisposeEvent e) {
-					if(((Label)e.widget).getImage() != null) ((Label)e.widget).getImage().dispose(); //dispose image
 				}
 			});
 		}
